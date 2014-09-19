@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.0.0 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.0.2 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -14,7 +14,7 @@ Options:
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.0.0'
+__version__ = '1.0.2'
 
 from docopt import docopt
 import sys
@@ -67,14 +67,15 @@ def annotate_fusion(ref_f, input, output):
                 # extract isoform annotations
                 iso = list(filter(lambda x: x.startswith('iso'), itl[2:]))
                 for fus in itl[(2 + len(iso)):]: # for each overlapped fusion junction
+                    flag = 0
                     mapper, name, reads = fus.split()[1:]
                     fus_start, fus_end = fusion_index[fus]
-                    edge_annotation = '' # first or last exon flag
+                    edge_annotation = [] # first or last exon flag
                     for iso_id in iso:
                         g, i, c, s = iso_id.split()[1:]
                         start = isoform[iso_id][0][0]
                         end = isoform[iso_id][-1][-1]
-                        if fus_start < start or fus_end > end: # fusion junction excesses boundaries of isoform annotation
+                        if fus_start < start - 10 or fus_end > end + 10: # fusion junction excesses boundaries of isoform annotation
                             continue
                         fusion_info, index, edge = map_fusion_to_iso(fus_start,
                                                                      fus_end, s,
@@ -90,14 +91,15 @@ def annotate_fusion(ref_f, input, output):
                             bed = '\t'.join([bed_info, fusion_info, g, i, index])
                             if not edge: # not first or last exon
                                 outf.write(bed + '\n')
-                                total += 1
-                                break
+                                flag += 1
                             else: # first or last exon
-                                edge_annotation = bed
-                    else: # cannot align or boundary exon
-                        if edge_annotation: # first or last exon
+                                edge_annotation.append(bed)
+                    if not flag and edge_annotation: # first or last exon
+                        for bed in edge_annotation:
                             outf.write(bed + '\n')
-                            total += 1
+                        total += 1
+                    elif flag:
+                        total += 1
     print('Annotated %d fusion junctions!' % total)
 
 def fix_fusion(ref_f, genome_fa, input, output):
@@ -276,11 +278,15 @@ def convert_to_bed(start, end, starts, ends, start_index, end_index, edge):
 def fix_bed(fusion_file, ref, fa):
     fusion = defaultdict(dict)
     fixed_flag = defaultdict(dict) # flag to indicate realignment
+    junctions = set()
     with open(fusion_file, 'r') as f:
         for line in f:
             chrom = line.split()[0]
             strand = line.split()[5]
             start, end = [int(x) for x in line.split()[1:3]]
+            junction_info = '%s\t%d\t%d' % (chrom, start, end)
+            if junction_info in junctions:
+                continue
             mapper, reads = line.split()[3].split('/')
             reads = int(reads)
             flag, gene, iso, index = line.split()[-4:]
@@ -292,10 +298,12 @@ def fix_bed(fusion_file, ref, fa):
                 if start == iso_starts[s] and end == iso_ends[e]: # not realign
                     fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
                     fixed_flag[name][mapper] = 0
+                    junctions.add(junction_info)
                 elif check_seq(chrom, [start, iso_starts[s], end, iso_ends[e]],
                                fa): # realign
                     fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
                     fixed_flag[name][mapper] = 1
+                    junctions.add(junction_info)
             else: # ciRNAs
                 index = int(index)
                 if strand == '+':
@@ -303,6 +311,7 @@ def fix_bed(fusion_file, ref, fa):
                         name += '|'.join(['', str(start), str(end)])
                         fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
                         fixed_flag[name][mapper] = 0
+                        junctions.add(junction_info)
                     elif check_seq(chrom, [start, iso_ends[index], end], fa,
                                    intron_flag=True): # realign
                         fixed_start = iso_ends[index]
@@ -310,11 +319,13 @@ def fix_bed(fusion_file, ref, fa):
                         name += '|'.join(['', str(fixed_start), str(fixed_end)])
                         fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
                         fixed_flag[name][mapper] = 1
+                        junctions.add(junction_info)
                 else:
                     if end == iso_starts[index + 1]: # not realign
                         name += '|'.join(['', str(start), str(end)])
                         fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
                         fixed_flag[name][mapper] = 0
+                        junctions.add(junction_info)
                     elif check_seq(chrom, [end, iso_starts[index + 1], start],
                                    fa, intron_flag=True): # realign
                         fixed_end = iso_starts[index + 1]
@@ -322,6 +333,7 @@ def fix_bed(fusion_file, ref, fa):
                         name += '|'.join(['', str(fixed_start), str(fixed_end)])
                         fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
                         fixed_flag[name][mapper] = 1
+                        junctions.add(junction_info)
     return (fusion, fixed_flag)
 
 def check_seq(chrom, pos, fa, intron_flag=False):
