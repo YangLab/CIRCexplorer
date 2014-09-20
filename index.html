@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Circexplorer by YangLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Circexplorer</h1>
+        <p>Circular RNA analysis toolkits</p>
+
+        <p class="view"><a href="https://github.com/YangLab/CIRCexplorer">View the Project on GitHub <small>YangLab/CIRCexplorer</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/YangLab/CIRCexplorer/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/YangLab/CIRCexplorer/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/YangLab/CIRCexplorer">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="circexplorer" class="anchor" href="#circexplorer"><span class="octicon octicon-link"></span></a>CIRCexplorer</h1>
+
+<p><a href="https://travis-ci.org/YangLab/CIRCexplorer"><img src="https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master" alt="Build Status"></a></p>
+
+<p>CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.</p>
+
+<p>Version: 1.0.2</p>
+
+<p>Last Modified: 2014-09-19</p>
+
+<p>Authors: Xiao-Ou Zhang (<a href="mailto:zhangxiaoou@picb.ac.cn">zhangxiaoou@picb.ac.cn</a>), Li Yang (<a href="mailto:liyang@picb.ac.cn">liyang@picb.ac.cn</a>)</p>
+
+<p><a href="http://github.com/Yanglab/CIRCexplorer/releases">Download the latest stable version of CIRCexplorer</a></p>
+
+<p>To see what has changed in recent versions of CIRCexplorer, see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md">CHANGELOG</a>.</p>
+
+<h2>
+<a name="a-schematic-flow-shows-the-pipeline" class="anchor" href="#a-schematic-flow-shows-the-pipeline"><span class="octicon octicon-link"></span></a>A schematic flow shows the pipeline</h2>
+
+<p><img src="https://raw.githubusercontent.com/YangLab/CIRCexplorer/master/flow.jpg" alt="pipeline"></p>
+
+<h2>
+<a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
+
+<h3>
+<a name="software--package" class="anchor" href="#software--package"><span class="octicon octicon-link"></span></a>Software / Package</h3>
+
+<ul>
+<li>
+<a href="http://ccb.jhu.edu/software/tophat/index.shtml">TopHat</a> 2.0.9</li>
+<li>
+<a href="http://ccb.jhu.edu/software/tophat/fusion_index.html">TopHat-Fusion</a> included in TopHat 2.0.9</li>
+<li><a href="https://github.com/arq5x/bedtools2">bedtools</a></li>
+<li><a href="http://samtools.sourceforge.net">SAMtools</a></li>
+<li><a href="https://github.com/pysam-developers/pysam">pysam</a></li>
+<li><a href="https://github.com/kepbod/interval">interval</a></li>
+<li><a href="https://github.com/docopt/docopt">docopt</a></li>
+</ul><h3>
+<a name="rna-seq" class="anchor" href="#rna-seq"><span class="octicon octicon-link"></span></a>RNA-seq</h3>
+
+<p>The poly(A)−/ribo− RNA-seq is recommended. If you want to obtain more circular
+RNAs, RNase R treatment could be performed. To obtain junction reads for
+circular RNAs, two-step mapping strategy was exploited:</p>
+
+<ul>
+<li>Multiple mapping with TopHat</li>
+</ul><div class="highlight highlight-bash"><pre>tophat2 -a <span class="m">6</span> --microexon-search -m <span class="m">2</span> -p <span class="m">10</span> -G knownGene.gtf -o tophat hg19_bowtie2_index RNA_seq.fastq
+</pre></div>
+
+<ul>
+<li>Convert unmapped reads (using bamToFastq from <a href="https://github.com/arq5x/bedtools2">bedtools</a>)</li>
+</ul><div class="highlight highlight-bash"><pre>bamToFastq -i tophat/unmapped.bam -fq tophat/unmapped.fastq
+</pre></div>
+
+<ul>
+<li>Unique mapping with TopHat-Fusion</li>
+</ul><div class="highlight highlight-bash"><pre>tophat2 -o tophat_fusion -p <span class="m">15</span> --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq
+</pre></div>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<div class="highlight highlight-bash"><pre>CIRCexplorer.py -- circular RNA analysis toolkits.
+
+Usage: CIRCexplorer.py <span class="o">[</span>options<span class="o">]</span>
+
+Options:
+    -f FUSION, --fusion<span class="o">=</span>FUSION      Fusion BAM file
+    -g GENOME, --genome<span class="o">=</span>GENOME      Genome FASTA file
+    -r REF, --ref<span class="o">=</span>REF               Gene annotation
+    -o OUT, --output<span class="o">=</span>OUT            Output file <span class="o">[</span>default: circ.txt<span class="o">]</span>
+</pre></div>
+
+<h3>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<div class="highlight highlight-bash"><pre>CIRCexplorer.py -f tophat_fusion/accepted_hits.bam -g hg19.fa -r ref.txt
+</pre></div>
+
+<h3>
+<a name="note" class="anchor" href="#note"><span class="octicon octicon-link"></span></a>Note</h3>
+
+<ul>
+<li>ref.txt is in the format (refFlat.txt in UCSC) below (see details in <a href="https://github.com/YangLab/CIRCexplorer/blob/master/example/ref_example.txt">the example file</a>)</li>
+</ul><table>
+<thead><tr>
+<th align="center">Field</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">geneName</td>
+<td align="left">Name of gene</td>
+</tr>
+<tr>
+<td align="center">isoformName</td>
+<td align="left">Name of isoform</td>
+</tr>
+<tr>
+<td align="center">chrom</td>
+<td align="left">Reference sequence</td>
+</tr>
+<tr>
+<td align="center">strand</td>
+<td align="left">+ or - for strand</td>
+</tr>
+<tr>
+<td align="center">txStart</td>
+<td align="left">Transcription start position</td>
+</tr>
+<tr>
+<td align="center">txEnd</td>
+<td align="left">Transcription end position</td>
+</tr>
+<tr>
+<td align="center">cdsStart</td>
+<td align="left">Coding region start</td>
+</tr>
+<tr>
+<td align="center">cdsEnd</td>
+<td align="left">Coding region end</td>
+</tr>
+<tr>
+<td align="center">exonCount</td>
+<td align="left">Number of exons</td>
+</tr>
+<tr>
+<td align="center">exonStarts</td>
+<td align="left">Exon start positions</td>
+</tr>
+<tr>
+<td align="center">exonEnds</td>
+<td align="left">Exon end positions</td>
+</tr>
+</tbody>
+</table><ul>
+<li>hg19.fa is genome sequence in FASTA format and indexed (using <code>samtools faidx</code> from <a href="http://samtools.sourceforge.net">SAMtools</a>)</li>
+</ul><h2>
+<a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>Output</h2>
+
+<p>See details in <a href="https://github.com/YangLab/CIRCexplorer/blob/master/example/output_example.txt">the example file</a></p>
+
+<table>
+<thead><tr>
+<th align="center">Field</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">chrom</td>
+<td align="left">Chromosome</td>
+</tr>
+<tr>
+<td align="center">start</td>
+<td align="left">Start of junction</td>
+</tr>
+<tr>
+<td align="center">end</td>
+<td align="left">End of junction</td>
+</tr>
+<tr>
+<td align="center">name</td>
+<td align="left">Circular RNA/Junction reads</td>
+</tr>
+<tr>
+<td align="center">score</td>
+<td align="left">1 to indicate reads were realigned</td>
+</tr>
+<tr>
+<td align="center">strand</td>
+<td align="left">+ or - for strand</td>
+</tr>
+<tr>
+<td align="center">thickStart</td>
+<td align="left">No meaning</td>
+</tr>
+<tr>
+<td align="center">thickEnd</td>
+<td align="left">No meaning</td>
+</tr>
+<tr>
+<td align="center">itemRgb</td>
+<td align="left">0,0,0</td>
+</tr>
+<tr>
+<td align="center">exonCount</td>
+<td align="left">Number of exons</td>
+</tr>
+<tr>
+<td align="center">exonSizes</td>
+<td align="left">Exon sizes</td>
+</tr>
+<tr>
+<td align="center">exonOffsets</td>
+<td align="left">Exon offsets</td>
+</tr>
+<tr>
+<td align="center">readNumber</td>
+<td align="left">Number of junction reads</td>
+</tr>
+<tr>
+<td align="center">flag</td>
+<td align="left">'Yes' for ciRNA, and 'No' for circRNA</td>
+</tr>
+<tr>
+<td align="center">geneName</td>
+<td align="left">Name of gene</td>
+</tr>
+<tr>
+<td align="center">isoformName</td>
+<td align="left">Name of isoform</td>
+</tr>
+<tr>
+<td align="center">flankIntron</td>
+<td align="left">Left intron/Right intron</td>
+</tr>
+</tbody>
+</table><p><strong><em>Note: The first 12 columns are in <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1">BED12 format</a>.</em></strong></p>
+
+<h2>
+<a name="citation" class="anchor" href="#citation"><span class="octicon octicon-link"></span></a>Citation</h2>
+
+<p><strong><a href="http://www.sciencedirect.com/science/article/pii/S0092867414011118">Zhang et al., Complementary Sequence-Mediated Exon Circularization, Cell (2014), http://dx.doi.org/10.1016/j.cell.2014.09.001</a></strong></p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright (C) 2014 YangLab.  See the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/LICENSE.txt">LICENSE</a>
+file for license rights and limitations (MIT).</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/YangLab">YangLab</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
