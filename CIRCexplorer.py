@@ -396,6 +396,7 @@ if __name__ == '__main__':
     ref_f = options['--ref']
     output = options['--output']
     temp_dir, temp1, temp2 = create_temp()
+    print('Start CIRCexplorer %s' % __version__)
     convert_fusion(fusion_bam, temp1)
     annotate_fusion(ref_f, temp1, temp2)
     fix_fusion(ref_f, genome_fa, temp2, output)
