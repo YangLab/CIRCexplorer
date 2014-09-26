@@ -122,7 +122,7 @@ See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/m
 
 ##Citation
 
-**[Zhang et al., Complementary Sequence-Mediated Exon Circularization, Cell (2014), http://dx.doi.org/10.1016/j.cell.2014.09.001](http://www.sciencedirect.com/science/article/pii/S0092867414011118)**
+**[Zhang et al., Complementary Sequence-Mediated Exon Circularization, Cell (2014), 159:134-147](http://www.sciencedirect.com/science/article/pii/S0092867414011118)**
 
 ##License
 
