@@ -56,7 +56,7 @@ def annotate_fusion(ref_f, input, output):
     Align fusion juncrions to gene annotations
     """
     print('Start to annotate fusion junctions...')
-    gene, isoform = parse_ref1(ref_f) # gene annotations
+    gene, gene_info = parse_ref1(ref_f) # gene annotations
     fusion, fusion_index = parse_bed(input) # fusion junctions
     total = 0
     with open(output, 'w') as outf:
@@ -64,7 +64,7 @@ def annotate_fusion(ref_f, input, output):
             # overlap gene annotations with fusion juncrions
             result = Interval.overlapwith(gene[chrom].interval, fusion[chrom])
             for itl in result:
-                # extract isoform annotations
+                # extract gene annotations
                 iso = list(filter(lambda x: x.startswith('iso'), itl[2:]))
                 for fus in itl[(2 + len(iso)):]: # for each overlapped fusion junction
                     flag = 0
@@ -73,13 +73,13 @@ def annotate_fusion(ref_f, input, output):
                     edge_annotation = [] # first or last exon flag
                     for iso_id in iso:
                         g, i, c, s = iso_id.split()[1:]
-                        start = isoform[iso_id][0][0]
-                        end = isoform[iso_id][-1][-1]
-                        if fus_start < start - 10 or fus_end > end + 10: # fusion junction excesses boundaries of isoform annotation
+                        start = gene_info[iso_id][0][0]
+                        end = gene_info[iso_id][-1][-1]
+                        if fus_start < start - 10 or fus_end > end + 10: # fusion junction excesses boundaries of gene annotation
                             continue
                         fusion_info, index, edge = map_fusion_to_iso(fus_start,
                                                                      fus_end, s,
-                                                                     isoform[iso_id])
+                                                                     gene_info[iso_id])
                         if fusion_info:
                             fus_start_str = str(fus_start)
                             fus_end_str = str(fus_end)
@@ -171,7 +171,7 @@ def parse_bam(bam):
 
 def parse_ref1(ref_file):
     gene = defaultdict(list)
-    iso = {}
+    gene_info = {}
     with open(ref_file, 'r') as f:
         for line in f:
             gene_id, iso_id, chrom, strand = line.split()[:4]
@@ -181,10 +181,10 @@ def parse_ref1(ref_file):
             start = starts[0]
             end = ends[-1]
             gene[chrom].append([start, end, total_id])
-            iso[total_id] = [starts, ends]
+            gene_info[total_id] = [starts, ends]
     for chrom in gene:
         gene[chrom] = Interval(gene[chrom])
-    return (gene, iso)
+    return (gene, gene_info)
 
 def parse_ref2(ref_file):
     gene = {}
