@@ -4,15 +4,16 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.0.2
+Version: 1.0.3
 
-Last Modified: 2014-09-19
+Last Modified: 2014-10-11
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
 [Download the latest stable version of CIRCexplorer](http://github.com/Yanglab/CIRCexplorer/releases)
 
-To see what has changed in recent versions of CIRCexplorer, see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md).
+To see what has changed in recent versions of CIRCexplorer,
+see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md).
 
 ##A schematic flow shows the pipeline
 
@@ -32,9 +33,9 @@ To see what has changed in recent versions of CIRCexplorer, see the [CHANGELOG](
 
 ###RNA-seq
 
-The poly(A)−/ribo− RNA-seq is recommended. If you want to obtain more circular
-RNAs, RNase R treatment could be performed. To obtain junction reads for
-circular RNAs, two-step mapping strategy was exploited:
+The [poly(A)−/ribo− RNA-seq](http://genomebiology.com/2011/12/2/R16) is recommended. If you want to obtain more circular
+RNAs, [RNase R treatment](http://www.sciencedirect.com/science/article/pii/S109727651300590X) could be performed.
+To obtain junction reads for circular RNAs, two-step mapping strategy was exploited:
 
 * Multiple mapping with TopHat
 
@@ -104,7 +105,7 @@ See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/m
 | start       | Start of junction                     |
 | end         | End of junction                       |
 | name        | Circular RNA/Junction reads           |
-| score       | 1 to indicate reads were realigned    |
+| score       | non-zero to indicate realignment      |
 | strand      | + or - for strand                     |
 | thickStart  | No meaning                            |
 | thickEnd    | No meaning                            |

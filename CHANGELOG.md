@@ -1,3 +1,10 @@
+## 1.0.3 (2014-10-11)
+
+Improvements:
+
+* remove redundant source codes
+* modify source codes according to PEP8
+
 ## 1.0.2 (2014-09-15)
 
 Bugfixes:
