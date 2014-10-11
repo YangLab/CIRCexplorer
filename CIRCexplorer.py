@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.0.2 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.0.3 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -14,7 +14,7 @@ Options:
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 from docopt import docopt
 import sys
@@ -24,100 +24,109 @@ from interval import Interval
 import tempfile
 import os
 
-def convert_fusion(fusion_bam, output):
+
+def convert_fusion(fusion_bam, output_f):
     """
     Extract fusion junction reads from the BAM file
     """
     print('Start to convert fustion reads...')
-    fusion = defaultdict(int)
+    fusions = defaultdict(int)
     for i, read in enumerate(parse_bam(fusion_bam)):
         chrom, strand, start, end = read
         segments = [start, end]
         if (i + 1) % 2 == 1:  # first fragment of the fusion junction read
             interval = [start, end]
         else:  # second fragment of the fusion junction read
-            sta1 = interval[0]
-            end1 = interval[1]
-            sta2 = segments[0]
-            end2 = segments[1]
+            sta1, end1 = interval
+            sta2, end2 = segments
             if end1 < sta2 or end2 < sta1:  # no overlap between fragments
                 sta = sta1 if sta1 < sta2 else sta2
                 end = end1 if end1 > end2 else end2
-                fusion['%s\t%d\t%d' % (chrom, sta, end)] += 1
+                fusions['%s\t%d\t%d' % (chrom, sta, end)] += 1
     total = 0
-    with open(output, 'w') as outf:
-        for i, pos in enumerate(fusion):
-            outf.write('%s\tFUSIONJUNC_%d/%d\t0\t+\n' % (pos, i, fusion[pos]))
-            total += fusion[pos]
+    with open(output_f, 'w') as outf:
+        for i, pos in enumerate(fusions):
+            outf.write('%s\tFUSIONJUNC_%d/%d\t0\t+\n' % (pos, i, fusions[pos]))
+            total += fusions[pos]
     print('Converted %d fusion reads!' % total)
 
-def annotate_fusion(ref_f, input, output):
+
+def annotate_fusion(ref_f, input_f, output_f):
     """
     Align fusion juncrions to gene annotations
     """
     print('Start to annotate fusion junctions...')
-    gene, gene_info = parse_ref1(ref_f) # gene annotations
-    fusion, fusion_index = parse_bed(input) # fusion junctions
-    total = 0
-    with open(output, 'w') as outf:
-        for chrom in gene:
+    genes, gene_info = parse_ref1(ref_f)  # gene annotations
+    fusions, fusion_index = parse_bed(input_f)  # fusion junctions
+    total = set()
+    with open(output_f, 'w') as outf:
+        for chrom in genes:
             # overlap gene annotations with fusion juncrions
-            result = Interval.overlapwith(gene[chrom].interval, fusion[chrom])
+            result = Interval.overlapwith(genes[chrom].interval,
+                                          fusions[chrom])
             for itl in result:
                 # extract gene annotations
                 iso = list(filter(lambda x: x.startswith('iso'), itl[2:]))
-                for fus in itl[(2 + len(iso)):]: # for each overlapped fusion junction
+                # for each overlapped fusion junction
+                for fus in itl[(2 + len(iso)):]:
                     flag = 0
-                    mapper, name, reads = fus.split()[1:]
+                    reads = fus.split()[1]
                     fus_start, fus_end = fusion_index[fus]
-                    edge_annotation = [] # first or last exon flag
+                    edge_annotations = []  # first or last exon flag
                     for iso_id in iso:
                         g, i, c, s = iso_id.split()[1:]
                         start = gene_info[iso_id][0][0]
                         end = gene_info[iso_id][-1][-1]
-                        if fus_start < start - 10 or fus_end > end + 10: # fusion junction excesses boundaries of gene annotation
+                        # fusion junction excesses boundaries of gene
+                        # annotation
+                        if fus_start < start - 10 or fus_end > end + 10:
                             continue
-                        fusion_info, index, edge = map_fusion_to_iso(fus_start,
-                                                                     fus_end, s,
-                                                                     gene_info[iso_id])
+                        (fusion_info,
+                         index,
+                         edge) = map_fusion_to_iso(fus_start,
+                                                   fus_end, s,
+                                                   gene_info[iso_id])
                         if fusion_info:
                             fus_start_str = str(fus_start)
                             fus_end_str = str(fus_end)
                             bed_info = '\t'.join([chrom, fus_start_str,
                                                   fus_end_str,
-                                                  '/'.join([mapper, reads]),
+                                                  'FUSIONJUNC/%s' % reads,
                                                   '0', s, fus_start_str,
                                                   fus_start_str, '0,0,0'])
-                            bed = '\t'.join([bed_info, fusion_info, g, i, index])
-                            if not edge: # not first or last exon
+                            bed = '\t'.join([bed_info, fusion_info, g, i,
+                                             index])
+                            if not edge:  # not first or last exon
                                 outf.write(bed + '\n')
                                 flag += 1
-                            else: # first or last exon
-                                edge_annotation.append(bed)
-                    if not flag and edge_annotation: # first or last exon
-                        for bed in edge_annotation:
+                            else:  # first or last exon
+                                edge_annotations.append(bed)
+                    if not flag and edge_annotations:  # first or last exon
+                        for bed in edge_annotations:
                             outf.write(bed + '\n')
-                        total += 1
+                        total.add(fus)
                     elif flag:
-                        total += 1
-    print('Annotated %d fusion junctions!' % total)
+                        total.add(fus)
+    print('Annotated %d fusion junctions!' % len(total))
 
-def fix_fusion(ref_f, genome_fa, input, output):
+
+def fix_fusion(ref_f, genome_fa, input_f, output_f):
     """
     Realign fusion juncrions
     """
     print('Start to fix fusion junctions...')
     fa = genome_fa
     ref = parse_ref2(ref_f)
-    fusion, fixed_flag = fix_bed(input, ref, fa)
+    fusions, fusion_names, fixed_flag = fix_bed(input_f, ref, fa)
     total = 0
-    with open(output, 'w') as outf:
-        for fus in fusion:
-            tophat_reads = fusion[fus]['tophat']
-            fixed = str(fixed_flag[fus]['tophat'])
-            if fixed == '1':
+    with open(output_f, 'w') as outf:
+        for fus in fusion_names:
+            reads = str(fusions[fus])
+            fixed = fixed_flag[fus]
+            if fixed > 0:
                 total += 1
-            name = 'circular_RNA/' + str(tophat_reads)
+            fixed = str(fixed)
+            name = 'circular_RNA/' + reads
             gene, iso, chrom, strand, index = fus.split()
             starts, ends = ref['\t'.join([gene, iso, chrom, strand])]
             if ',' in index:  # back spliced exons
@@ -138,7 +147,7 @@ def fix_fusion(ref_f, genome_fa, input, output):
                 intron = '|'.join([left_intron, right_intron])
                 bed = '\t'.join([chrom, start, end, name, fixed, strand, start,
                                  start, '0,0,0', length, sizes, offsets,
-                                 str(tophat_reads), 'No', gene, iso, intron])
+                                 reads, 'No', gene, iso, intron])
             else:  # ciRNAs
                 index, start, end = index.split('|')
                 size = str(int(end) - int(start))
@@ -146,58 +155,63 @@ def fix_fusion(ref_f, genome_fa, input, output):
                 intron = '%s:%d-%d' % (chrom, ends[index], starts[index + 1])
                 bed = '\t'.join([chrom, start, end, name, fixed, strand, start,
                                  start, '0,0,0', '1', size, '0',
-                                 str(tophat_reads), 'Yes', gene, iso, intron])
+                                 reads, 'Yes', gene, iso, intron])
             outf.write(bed + '\n')
     print('Fixed %d fusion junctions!' % total)
 
+
 def parse_bam(bam):
-    fusion = {}
+    fusions = {}
     for read in bam:
-        if read.is_secondary: # not the primary alignment
+        if read.is_secondary:  # not the primary alignment
             continue
         tags = dict(read.tags)
-        if 'XF' not in tags: # not fusion junctions
+        if 'XF' not in tags:  # not fusion junctions
             continue
         chr1, chr2 = tags['XF'].split()[1].split('-')
-        if chr1 != chr2: # not on the same chromosome
+        if chr1 != chr2:  # not on the same chromosome
             continue
         strand = '+' if not read.is_reverse else '-'
-        if read.qname not in fusion: # first fragment
-            fusion[read.qname] = [chr1, strand, read.pos, read.aend]
-        else: # second fragment
-            if chr1 == fusion[read.qname][0] and strand == fusion[read.qname][1]:
+        if read.qname not in fusions:  # first fragment
+            fusions[read.qname] = [chr1, strand, read.pos, read.aend]
+        else:  # second fragment
+            if chr1 == fusions[read.qname][0] \
+               and strand == fusions[read.qname][1]:
                 yield [chr1, strand, read.pos, read.aend]
-                yield fusion[read.qname]
+                yield fusions[read.qname]
+
 
 def parse_ref1(ref_file):
-    gene = defaultdict(list)
+    genes = defaultdict(list)
     gene_info = {}
     with open(ref_file, 'r') as f:
         for line in f:
             gene_id, iso_id, chrom, strand = line.split()[:4]
             total_id = '\t'.join(['iso', gene_id, iso_id, chrom, strand])
-            starts = list(map(int, line.split()[9].split(',')[:-1]))
-            ends = list(map(int, line.split()[10].split(',')[:-1]))
+            starts = [int(x) for x in line.split()[9].split(',')[:-1]]
+            ends = [int(x) for x in line.split()[10].split(',')[:-1]]
             start = starts[0]
             end = ends[-1]
-            gene[chrom].append([start, end, total_id])
+            genes[chrom].append([start, end, total_id])
             gene_info[total_id] = [starts, ends]
-    for chrom in gene:
-        gene[chrom] = Interval(gene[chrom])
-    return (gene, gene_info)
+    for chrom in genes:
+        genes[chrom] = Interval(genes[chrom])
+    return (genes, gene_info)
+
 
 def parse_ref2(ref_file):
-    gene = {}
+    genes = {}
     with open(ref_file, 'r') as f:
         for line in f:
             gene_id, iso_id, chrom, strand = line.split()[:4]
             starts = [int(x) for x in line.split()[9].split(',')[:-1]]
             ends = [int(x) for x in line.split()[10].split(',')[:-1]]
-            gene['\t'.join([gene_id, iso_id, chrom, strand])] = [starts, ends]
-    return gene
+            genes['\t'.join([gene_id, iso_id, chrom, strand])] = [starts, ends]
+    return genes
+
 
 def parse_bed(fus):
-    fusion = defaultdict(list)
+    fusions = defaultdict(list)
     fusion_index = {}
     with open(fus, 'r') as f:
         for line in f:
@@ -205,10 +219,11 @@ def parse_bed(fus):
             start = int(start)
             end = int(end)
             reads = name.split('/')[1]
-            fusion_id = 'fusion\ttophat\t%s\t%s' % (name, reads)
-            fusion[chrom].append([start, end, fusion_id])
+            fusion_id = '%s\t%s' % (name, reads)
+            fusions[chrom].append([start, end, fusion_id])
             fusion_index[fusion_id] = [start, end]
-    return (fusion, fusion_index)
+    return (fusions, fusion_index)
+
 
 def map_fusion_to_iso(start, end, strand, iso_info):
     starts = iso_info[0]
@@ -255,11 +270,12 @@ def map_fusion_to_iso(start, end, strand, iso_info):
         else:
             edge_flag = True
         return convert_to_bed(start, end,
-                            starts[start_index:(end_index + 1)],
-                            ends[start_index:(end_index + 1)],
-                            str(start_index), str(end_index), edge_flag)
+                              starts[start_index:(end_index + 1)],
+                              ends[start_index:(end_index + 1)],
+                              str(start_index), str(end_index), edge_flag)
     else:
         return(None, None, False)
+
 
 def convert_to_bed(start, end, starts, ends, start_index, end_index, edge):
     new_starts = [start] + starts[1:]
@@ -275,9 +291,12 @@ def convert_to_bed(start, end, starts, ends, start_index, end_index, edge):
     return ('\t'.join([str(length), block_sizes, block_starts, 'No']), index,
             edge)
 
+
 def fix_bed(fusion_file, ref, fa):
-    fusion = defaultdict(dict)
-    fixed_flag = defaultdict(dict) # flag to indicate realignment
+    fusions = defaultdict(int)
+    # make sure order of fusion names according to fusion_file
+    fusion_names = []
+    fixed_flag = defaultdict(int)  # flag to indicate realignment
     junctions = set()
     with open(fusion_file, 'r') as f:
         for line in f:
@@ -287,57 +306,68 @@ def fix_bed(fusion_file, ref, fa):
             junction_info = '%s\t%d\t%d' % (chrom, start, end)
             if junction_info in junctions:
                 continue
-            mapper, reads = line.split()[3].split('/')
-            reads = int(reads)
+            reads = int(line.split()[3].split('/')[1])
             flag, gene, iso, index = line.split()[-4:]
             flag = True if flag == 'Yes' else False
             name = '\t'.join([gene, iso, chrom, strand, index])
             iso_starts, iso_ends = ref['\t'.join([gene, iso, chrom, strand])]
-            if not flag: # back spliced exons
+            if not flag:  # back spliced exons
                 s, e = [int(x) for x in index.split(',')]
-                if start == iso_starts[s] and end == iso_ends[e]: # not realign
-                    fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
-                    fixed_flag[name][mapper] = 0
+                # not realign
+                if start == iso_starts[s] and end == iso_ends[e]:
+                    fusions[name] += reads
+                    fusion_names.append(name)
                     junctions.add(junction_info)
+                # realign
                 elif check_seq(chrom, [start, iso_starts[s], end, iso_ends[e]],
-                               fa): # realign
-                    fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
-                    fixed_flag[name][mapper] = 1
+                               fa):
+                    fusions[name] += reads
+                    fusion_names.append(name)
+                    fixed_flag[name] += 1
                     junctions.add(junction_info)
-            else: # ciRNAs
+            else:  # ciRNAs
                 index = int(index)
                 if strand == '+':
-                    if start == iso_ends[index]: # not realign
+                    # not realign
+                    if start == iso_ends[index]:
                         name += '|'.join(['', str(start), str(end)])
-                        fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
-                        fixed_flag[name][mapper] = 0
+                        fusions[name] += reads
+                        fusion_names.append(name)
                         junctions.add(junction_info)
+                    # realign
                     elif check_seq(chrom, [start, iso_ends[index], end], fa,
-                                   intron_flag=True): # realign
+                                   intron_flag=True):
                         fixed_start = iso_ends[index]
                         fixed_end = end + fixed_start - start
-                        name += '|'.join(['', str(fixed_start), str(fixed_end)])
-                        fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
-                        fixed_flag[name][mapper] = 1
+                        name += '|'.join(['', str(fixed_start),
+                                          str(fixed_end)])
+                        fusions[name] += reads
+                        fusion_names.append(name)
+                        fixed_flag[name] += 1
                         junctions.add(junction_info)
                 else:
-                    if end == iso_starts[index + 1]: # not realign
+                    if end == iso_starts[index + 1]:
+                        # not realign
                         name += '|'.join(['', str(start), str(end)])
-                        fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
-                        fixed_flag[name][mapper] = 0
+                        fusions[name] += reads
+                        fusion_names.append(name)
                         junctions.add(junction_info)
+                        # realign
                     elif check_seq(chrom, [end, iso_starts[index + 1], start],
-                                   fa, intron_flag=True): # realign
+                                   fa, intron_flag=True):
                         fixed_end = iso_starts[index + 1]
                         fixed_start = start + fixed_end - end
-                        name += '|'.join(['', str(fixed_start), str(fixed_end)])
-                        fusion[name][mapper] = fusion[name].get(mapper, 0) + reads
-                        fixed_flag[name][mapper] = 1
+                        name += '|'.join(['', str(fixed_start),
+                                          str(fixed_end)])
+                        fusions[name] += reads
+                        fusion_names.append(name)
+                        fixed_flag[name] += 1
                         junctions.add(junction_info)
-    return (fusion, fixed_flag)
+    return (fusions, fusion_names, fixed_flag)
+
 
 def check_seq(chrom, pos, fa, intron_flag=False):
-    if not intron_flag: # back spliced exons
+    if not intron_flag:  # back spliced exons
         if pos[0] - pos[1] != pos[2] - pos[3]:
             return False
         if pos[0] < pos[1]:
@@ -346,7 +376,7 @@ def check_seq(chrom, pos, fa, intron_flag=False):
         else:
             seq1 = fa.fetch(chrom, pos[1], pos[0])
             seq2 = fa.fetch(chrom, pos[3], pos[2])
-    else: # ciRNAs
+    else:  # ciRNAs
         if abs(pos[0] - pos[1]) <= 5:  # permit mismatches within 5bp
             return True
         elif pos[0] < pos[1]:
@@ -360,6 +390,7 @@ def check_seq(chrom, pos, fa, intron_flag=False):
     else:
         return False
 
+
 def generate_bed(start, starts, ends):
     sizes, offsets = [], []
     for s, e in zip(starts, ends):
@@ -369,16 +400,19 @@ def generate_bed(start, starts, ends):
     offsets = ','.join(offsets)
     return (sizes, offsets)
 
+
 def create_temp():
     temp_dir = tempfile.mkdtemp()
     temp1 = temp_dir + '/tmp1'
     temp2 = temp_dir + '/tmp2'
     return (temp_dir, temp1, temp2)
 
+
 def delete_temp(temp_dir, temp1, temp2):
     os.remove(temp1)
     os.remove(temp2)
     os.rmdir(temp_dir)
+
 
 if __name__ == '__main__':
     options = docopt(__doc__)
@@ -392,7 +426,8 @@ if __name__ == '__main__':
     try:
         genome_fa = pysam.Fastafile(options['--genome'])
     except:
-        sys.exit('Please make sure %s is a Fasta file and indexed!' % options['--genome'])
+        sys.exit('Please make sure %s is a Fasta file and indexed!'
+                 % options['--genome'])
     ref_f = options['--ref']
     output = options['--output']
     temp_dir, temp1, temp2 = create_temp()

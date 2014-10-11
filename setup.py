@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name='CIRCexplorer',
-      version='1.0.2',
+      version='1.0.3',
       description='Circular RNA analysis toolkits',
       author='Xiao-Ou Zhang',
       author_email='zhangxiaoou@picb.ac.cn',
