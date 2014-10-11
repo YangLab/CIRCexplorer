@@ -35,15 +35,16 @@
 
 <p>CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.</p>
 
-<p>Version: 1.0.2</p>
+<p>Version: 1.0.3</p>
 
-<p>Last Modified: 2014-09-19</p>
+<p>Last Modified: 2014-10-11</p>
 
 <p>Authors: Xiao-Ou Zhang (<a href="mailto:zhangxiaoou@picb.ac.cn">zhangxiaoou@picb.ac.cn</a>), Li Yang (<a href="mailto:liyang@picb.ac.cn">liyang@picb.ac.cn</a>)</p>
 
 <p><a href="http://github.com/Yanglab/CIRCexplorer/releases">Download the latest stable version of CIRCexplorer</a></p>
 
-<p>To see what has changed in recent versions of CIRCexplorer, see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md">CHANGELOG</a>.</p>
+<p>To see what has changed in recent versions of CIRCexplorer,
+see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md">CHANGELOG</a>.</p>
 
 <h2>
 <a name="a-schematic-flow-shows-the-pipeline" class="anchor" href="#a-schematic-flow-shows-the-pipeline"><span class="octicon octicon-link"></span></a>A schematic flow shows the pipeline</h2>
@@ -66,26 +67,34 @@
 <li><a href="https://github.com/pysam-developers/pysam">pysam</a></li>
 <li><a href="https://github.com/kepbod/interval">interval</a></li>
 <li><a href="https://github.com/docopt/docopt">docopt</a></li>
-</ul><h3>
+</ul>
+
+<h3>
 <a name="rna-seq" class="anchor" href="#rna-seq"><span class="octicon octicon-link"></span></a>RNA-seq</h3>
 
-<p>The poly(A)−/ribo− RNA-seq is recommended. If you want to obtain more circular
-RNAs, RNase R treatment could be performed. To obtain junction reads for
-circular RNAs, two-step mapping strategy was exploited:</p>
+<p>The <a href="http://genomebiology.com/2011/12/2/R16">poly(A)−/ribo− RNA-seq</a> is recommended. If you want to obtain more circular
+RNAs, <a href="http://www.sciencedirect.com/science/article/pii/S109727651300590X">RNase R treatment</a> could be performed.
+To obtain junction reads for circular RNAs, two-step mapping strategy was exploited:</p>
 
 <ul>
 <li>Multiple mapping with TopHat</li>
-</ul><div class="highlight highlight-bash"><pre>tophat2 -a <span class="m">6</span> --microexon-search -m <span class="m">2</span> -p <span class="m">10</span> -G knownGene.gtf -o tophat hg19_bowtie2_index RNA_seq.fastq
+</ul>
+
+<div class="highlight highlight-bash"><pre>tophat2 -a <span class="m">6</span> --microexon-search -m <span class="m">2</span> -p <span class="m">10</span> -G knownGene.gtf -o tophat hg19_bowtie2_index RNA_seq.fastq
 </pre></div>
 
 <ul>
 <li>Convert unmapped reads (using bamToFastq from <a href="https://github.com/arq5x/bedtools2">bedtools</a>)</li>
-</ul><div class="highlight highlight-bash"><pre>bamToFastq -i tophat/unmapped.bam -fq tophat/unmapped.fastq
+</ul>
+
+<div class="highlight highlight-bash"><pre>bamToFastq -i tophat/unmapped.bam -fq tophat/unmapped.fastq
 </pre></div>
 
 <ul>
 <li>Unique mapping with TopHat-Fusion</li>
-</ul><div class="highlight highlight-bash"><pre>tophat2 -o tophat_fusion -p <span class="m">15</span> --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq
+</ul>
+
+<div class="highlight highlight-bash"><pre>tophat2 -o tophat_fusion -p <span class="m">15</span> --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq
 </pre></div>
 
 <h2>
@@ -112,12 +121,16 @@ Options:
 <a name="note" class="anchor" href="#note"><span class="octicon octicon-link"></span></a>Note</h3>
 
 <ul>
-<li>ref.txt is in the format (refFlat.txt in UCSC) below (see details in <a href="https://github.com/YangLab/CIRCexplorer/blob/master/example/ref_example.txt">the example file</a>)</li>
-</ul><table>
-<thead><tr>
+<li>ref.txt is in the format (<a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format9">Gene Predictions and RefSeq Genes with Gene Names</a>) below (see details in <a href="https://github.com/YangLab/CIRCexplorer/blob/master/example/ref_example.txt">the example file</a>)</li>
+</ul>
+
+<table>
+<thead>
+<tr>
 <th align="center">Field</th>
 <th align="left">Description</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr>
 <td align="center">geneName</td>
@@ -164,18 +177,24 @@ Options:
 <td align="left">Exon end positions</td>
 </tr>
 </tbody>
-</table><ul>
+</table>
+
+<ul>
 <li>hg19.fa is genome sequence in FASTA format and indexed (using <code>samtools faidx</code> from <a href="http://samtools.sourceforge.net">SAMtools</a>)</li>
-</ul><h2>
+</ul>
+
+<h2>
 <a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>Output</h2>
 
 <p>See details in <a href="https://github.com/YangLab/CIRCexplorer/blob/master/example/output_example.txt">the example file</a></p>
 
 <table>
-<thead><tr>
+<thead>
+<tr>
 <th align="center">Field</th>
 <th align="left">Description</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr>
 <td align="center">chrom</td>
@@ -195,7 +214,7 @@ Options:
 </tr>
 <tr>
 <td align="center">score</td>
-<td align="left">1 to indicate reads were realigned</td>
+<td align="left">non-zero to indicate realignment</td>
 </tr>
 <tr>
 <td align="center">strand</td>
@@ -246,7 +265,9 @@ Options:
 <td align="left">Left intron/Right intron</td>
 </tr>
 </tbody>
-</table><p><strong><em>Note: The first 12 columns are in <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1">BED12 format</a>.</em></strong></p>
+</table>
+
+<p><strong><em>Note: The first 12 columns are in <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1">BED12 format</a>.</em></strong></p>
 
 <h2>
 <a name="citation" class="anchor" href="#citation"><span class="octicon octicon-link"></span></a>Citation</h2>
