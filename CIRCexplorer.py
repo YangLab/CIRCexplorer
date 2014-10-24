@@ -2,19 +2,22 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.0.3 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.0.4 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
 Options:
-    -f FUSION, --fusion=FUSION      Fusion BAM file
-    -g GENOME, --genome=GENOME      Genome FASTA file
-    -r REF, --ref=REF               Gene annotation
-    -o OUT, --output=OUT            Output file [default: circ.txt]
+    -h --help                      Show this screen.
+    --version                      Show version.
+    -f FUSION --fusion=FUSION      Fusion BAM file.
+    -g GENOME --genome=GENOME      Genome FASTA file.
+    -r REF --ref=REF               Gene annotation.
+    -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
+    --tmp                          Keep temporary files.
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 
 from docopt import docopt
 import sys
@@ -401,10 +404,15 @@ def generate_bed(start, starts, ends):
     return (sizes, offsets)
 
 
-def create_temp():
-    temp_dir = tempfile.mkdtemp()
-    temp1 = temp_dir + '/tmp1'
-    temp2 = temp_dir + '/tmp2'
+def create_temp(tmp_flag, prefix):
+    if tmp_flag:
+        temp_dir = os.getcwd()
+        temp1 = temp_dir + '/%s_fusion_junction_info.txt' % prefix
+        temp2 = temp_dir + '/%s_annotated_junction_info.txt' % prefix
+    else:
+        temp_dir = tempfile.mkdtemp()
+        temp1 = temp_dir + '/tmp1'
+        temp2 = temp_dir + '/tmp2'
     return (temp_dir, temp1, temp2)
 
 
@@ -415,10 +423,16 @@ def delete_temp(temp_dir, temp1, temp2):
 
 
 if __name__ == '__main__':
-    options = docopt(__doc__)
-    for arg in options:
+    if len(sys.argv) == 1:
+        sys.exit(__doc__)
+    options = docopt(__doc__, version=__version__)
+    parameters = ('--fusion', '--genome', '--ref')
+    miss_parameters = []
+    for arg in parameters:
         if not options[arg]:
-            sys.exit(__doc__)
+            miss_parameters.append(arg)
+    if miss_parameters:
+        sys.exit('Lack required option: ' + ' '.join(miss_parameters))
     try:
         fusion_bam = pysam.Samfile(options['--fusion'], 'rb')
     except:
@@ -429,10 +443,12 @@ if __name__ == '__main__':
         sys.exit('Please make sure %s is a Fasta file and indexed!'
                  % options['--genome'])
     ref_f = options['--ref']
-    output = options['--output']
-    temp_dir, temp1, temp2 = create_temp()
+    output_prefix = options['--output']
+    output = output_prefix + '_circ.txt'
+    temp_dir, temp1, temp2 = create_temp(options['--tmp'], output_prefix)
     print('Start CIRCexplorer %s' % __version__)
     convert_fusion(fusion_bam, temp1)
     annotate_fusion(ref_f, temp1, temp2)
     fix_fusion(ref_f, genome_fa, temp2, output)
-    delete_temp(temp_dir, temp1, temp2)
+    if not options['--tmp']:
+        delete_temp(temp_dir, temp1, temp2)

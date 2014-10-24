@@ -1,3 +1,10 @@
+## 1.0.4 (2014-10-24)
+
+Improvements:
+
+* add option '--tmp' to keep temporary files
+* change option '--output' from output file name to output file prefix
+
 ## 1.0.3 (2014-10-11)
 
 Improvements:
