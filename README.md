@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.0.3
+Version: 1.0.4
 
-Last Modified: 2014-10-11
+Last Modified: 2014-10-24
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -63,10 +63,13 @@ CIRCexplorer.py -- circular RNA analysis toolkits.
 Usage: CIRCexplorer.py [options]
 
 Options:
-    -f FUSION, --fusion=FUSION      Fusion BAM file
-    -g GENOME, --genome=GENOME      Genome FASTA file
-    -r REF, --ref=REF               Gene annotation
-    -o OUT, --output=OUT            Output file [default: circ.txt]
+    -h --help                      Show this screen.
+    --version                      Show version.
+    -f FUSION --fusion=FUSION      Fusion BAM file.
+    -g GENOME --genome=GENOME      Genome FASTA file.
+    -r REF --ref=REF               Gene annotation.
+    -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
+    --tmp                          Keep temporary files.
 ```
 
 ###Example
