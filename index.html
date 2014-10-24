@@ -35,9 +35,9 @@
 
 <p>CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.</p>
 
-<p>Version: 1.0.3</p>
+<p>Version: 1.0.4</p>
 
-<p>Last Modified: 2014-10-11</p>
+<p>Last Modified: 2014-10-24</p>
 
 <p>Authors: Xiao-Ou Zhang (<a href="mailto:zhangxiaoou@picb.ac.cn">zhangxiaoou@picb.ac.cn</a>), Li Yang (<a href="mailto:liyang@picb.ac.cn">liyang@picb.ac.cn</a>)</p>
 
@@ -105,10 +105,13 @@ To obtain junction reads for circular RNAs, two-step mapping strategy was exploi
 Usage: CIRCexplorer.py <span class="o">[</span>options<span class="o">]</span>
 
 Options:
-    -f FUSION, --fusion<span class="o">=</span>FUSION      Fusion BAM file
-    -g GENOME, --genome<span class="o">=</span>GENOME      Genome FASTA file
-    -r REF, --ref<span class="o">=</span>REF               Gene annotation
-    -o OUT, --output<span class="o">=</span>OUT            Output file <span class="o">[</span>default: circ.txt<span class="o">]</span>
+    -h --help                      Show this screen.
+    --version                      Show version.
+    -f FUSION --fusion<span class="o">=</span>FUSION      Fusion BAM file.
+    -g GENOME --genome<span class="o">=</span>GENOME      Genome FASTA file.
+    -r REF --ref<span class="o">=</span>REF               Gene annotation.
+    -o PREFIX --output<span class="o">=</span>PREFIX      Output prefix <span class="o">[</span>default: CIRCexplorer<span class="o">]</span>.
+    --tmp                          Keep temporary files.
 </pre></div>
 
 <h3>
