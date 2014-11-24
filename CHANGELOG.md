@@ -1,3 +1,9 @@
+## 1.0.5 (2014-11-23)
+
+Improvements:
+
+* add option '--no-fix' to not use fix step
+
 ## 1.0.4 (2014-10-24)
 
 Improvements:

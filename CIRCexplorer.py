@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.0.4 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.0.5 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -14,10 +14,12 @@ Options:
     -r REF --ref=REF               Gene annotation.
     -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
     --tmp                          Keep temporary files.
+    --no-fix                       No-fix mode (useful for species \
+with pool gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 from docopt import docopt
 import sys
@@ -113,14 +115,14 @@ def annotate_fusion(ref_f, input_f, output_f):
     print('Annotated %d fusion junctions!' % len(total))
 
 
-def fix_fusion(ref_f, genome_fa, input_f, output_f):
+def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
     """
     Realign fusion juncrions
     """
     print('Start to fix fusion junctions...')
     fa = genome_fa
     ref = parse_ref2(ref_f)
-    fusions, fusion_names, fixed_flag = fix_bed(input_f, ref, fa)
+    fusions, fusion_names, fixed_flag = fix_bed(input_f, ref, fa, no_fix)
     total = 0
     with open(output_f, 'w') as outf:
         for fus in fusion_names:
@@ -295,7 +297,7 @@ def convert_to_bed(start, end, starts, ends, start_index, end_index, edge):
             edge)
 
 
-def fix_bed(fusion_file, ref, fa):
+def fix_bed(fusion_file, ref, fa, no_fix):
     fusions = defaultdict(int)
     # make sure order of fusion names according to fusion_file
     fusion_names = []
@@ -320,6 +322,12 @@ def fix_bed(fusion_file, ref, fa):
                 if start == iso_starts[s] and end == iso_ends[e]:
                     fusions[name] += reads
                     fusion_names.append(name)
+                    junctions.add(junction_info)
+                # no fix mode
+                elif no_fix:
+                    fusions[name] += reads
+                    fusion_names.append(name)
+                    fixed_flag[name] += 1
                     junctions.add(junction_info)
                 # realign
                 elif check_seq(chrom, [start, iso_starts[s], end, iso_ends[e]],
@@ -449,6 +457,6 @@ if __name__ == '__main__':
     print('Start CIRCexplorer %s' % __version__)
     convert_fusion(fusion_bam, temp1)
     annotate_fusion(ref_f, temp1, temp2)
-    fix_fusion(ref_f, genome_fa, temp2, output)
+    fix_fusion(ref_f, genome_fa, temp2, output, options['--no-fix'])
     if not options['--tmp']:
         delete_temp(temp_dir, temp1, temp2)

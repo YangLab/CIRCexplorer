@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.0.4
+Version: 1.0.5
 
-Last Modified: 2014-10-24
+Last Modified: 2014-11-23
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -70,6 +70,7 @@ Options:
     -r REF --ref=REF               Gene annotation.
     -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
     --tmp                          Keep temporary files.
+    --no-fix                       No-fix mode (useful for species with pool gene annotations)
 ```
 
 ###Example
