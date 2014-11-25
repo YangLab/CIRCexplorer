@@ -29,15 +29,15 @@
       </header>
       <section>
         <h1>
-<a name="circexplorer" class="anchor" href="#circexplorer"><span class="octicon octicon-link"></span></a>CIRCexplorer</h1>
+<a id="circexplorer" class="anchor" href="#circexplorer" aria-hidden="true"><span class="octicon octicon-link"></span></a>CIRCexplorer</h1>
 
 <p><a href="https://travis-ci.org/YangLab/CIRCexplorer"><img src="https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master" alt="Build Status"></a></p>
 
 <p>CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.</p>
 
-<p>Version: 1.0.4</p>
+<p>Version: 1.0.5</p>
 
-<p>Last Modified: 2014-10-24</p>
+<p>Last Modified: 2014-11-23</p>
 
 <p>Authors: Xiao-Ou Zhang (<a href="mailto:zhangxiaoou@picb.ac.cn">zhangxiaoou@picb.ac.cn</a>), Li Yang (<a href="mailto:liyang@picb.ac.cn">liyang@picb.ac.cn</a>)</p>
 
@@ -47,15 +47,15 @@
 see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md">CHANGELOG</a>.</p>
 
 <h2>
-<a name="a-schematic-flow-shows-the-pipeline" class="anchor" href="#a-schematic-flow-shows-the-pipeline"><span class="octicon octicon-link"></span></a>A schematic flow shows the pipeline</h2>
+<a id="a-schematic-flow-shows-the-pipeline" class="anchor" href="#a-schematic-flow-shows-the-pipeline" aria-hidden="true"><span class="octicon octicon-link"></span></a>A schematic flow shows the pipeline</h2>
 
 <p><img src="https://raw.githubusercontent.com/YangLab/CIRCexplorer/master/flow.jpg" alt="pipeline"></p>
 
 <h2>
-<a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
+<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
 
 <h3>
-<a name="software--package" class="anchor" href="#software--package"><span class="octicon octicon-link"></span></a>Software / Package</h3>
+<a id="software--package" class="anchor" href="#software--package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Software / Package</h3>
 
 <ul>
 <li>
@@ -70,7 +70,7 @@ see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.m
 </ul>
 
 <h3>
-<a name="rna-seq" class="anchor" href="#rna-seq"><span class="octicon octicon-link"></span></a>RNA-seq</h3>
+<a id="rna-seq" class="anchor" href="#rna-seq" aria-hidden="true"><span class="octicon octicon-link"></span></a>RNA-seq</h3>
 
 <p>The <a href="http://genomebiology.com/2011/12/2/R16">poly(A)−/ribo− RNA-seq</a> is recommended. If you want to obtain more circular
 RNAs, <a href="http://www.sciencedirect.com/science/article/pii/S109727651300590X">RNase R treatment</a> could be performed.
@@ -80,48 +80,44 @@ To obtain junction reads for circular RNAs, two-step mapping strategy was exploi
 <li>Multiple mapping with TopHat</li>
 </ul>
 
-<div class="highlight highlight-bash"><pre>tophat2 -a <span class="m">6</span> --microexon-search -m <span class="m">2</span> -p <span class="m">10</span> -G knownGene.gtf -o tophat hg19_bowtie2_index RNA_seq.fastq
-</pre></div>
+<div class="highlight highlight-bash"><pre>tophat2 -a 6 --microexon-search -m 2 -p 10 -G knownGene.gtf -o tophat hg19_bowtie2_index RNA_seq.fastq</pre></div>
 
 <ul>
 <li>Convert unmapped reads (using bamToFastq from <a href="https://github.com/arq5x/bedtools2">bedtools</a>)</li>
 </ul>
 
-<div class="highlight highlight-bash"><pre>bamToFastq -i tophat/unmapped.bam -fq tophat/unmapped.fastq
-</pre></div>
+<div class="highlight highlight-bash"><pre>bamToFastq -i tophat/unmapped.bam -fq tophat/unmapped.fastq</pre></div>
 
 <ul>
 <li>Unique mapping with TopHat-Fusion</li>
 </ul>
 
-<div class="highlight highlight-bash"><pre>tophat2 -o tophat_fusion -p <span class="m">15</span> --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq
-</pre></div>
+<div class="highlight highlight-bash"><pre>tophat2 -o tophat_fusion -p 15 --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq</pre></div>
 
 <h2>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <div class="highlight highlight-bash"><pre>CIRCexplorer.py -- circular RNA analysis toolkits.
 
-Usage: CIRCexplorer.py <span class="o">[</span>options<span class="o">]</span>
+Usage: CIRCexplorer.py [options]
 
 Options:
     -h --help                      Show this screen.
     --version                      Show version.
-    -f FUSION --fusion<span class="o">=</span>FUSION      Fusion BAM file.
-    -g GENOME --genome<span class="o">=</span>GENOME      Genome FASTA file.
-    -r REF --ref<span class="o">=</span>REF               Gene annotation.
-    -o PREFIX --output<span class="o">=</span>PREFIX      Output prefix <span class="o">[</span>default: CIRCexplorer<span class="o">]</span>.
+    -f FUSION --fusion=FUSION      Fusion BAM file.
+    -g GENOME --genome=GENOME      Genome FASTA file.
+    -r REF --ref=REF               Gene annotation.
+    -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
     --tmp                          Keep temporary files.
-</pre></div>
+    --no-fix                       No-fix mode (useful <span class="pl-k">for</span> <span class="pl-vo">species</span> with pool gene annotations)</pre></div>
 
 <h3>
-<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
 
-<div class="highlight highlight-bash"><pre>CIRCexplorer.py -f tophat_fusion/accepted_hits.bam -g hg19.fa -r ref.txt
-</pre></div>
+<div class="highlight highlight-bash"><pre>CIRCexplorer.py -f tophat_fusion/accepted_hits.bam -g hg19.fa -r ref.txt</pre></div>
 
 <h3>
-<a name="note" class="anchor" href="#note"><span class="octicon octicon-link"></span></a>Note</h3>
+<a id="note" class="anchor" href="#note" aria-hidden="true"><span class="octicon octicon-link"></span></a>Note</h3>
 
 <ul>
 <li>ref.txt is in the format (<a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format9">Gene Predictions and RefSeq Genes with Gene Names</a>) below (see details in <a href="https://github.com/YangLab/CIRCexplorer/blob/master/example/ref_example.txt">the example file</a>)</li>
@@ -187,7 +183,7 @@ Options:
 </ul>
 
 <h2>
-<a name="output" class="anchor" href="#output"><span class="octicon octicon-link"></span></a>Output</h2>
+<a id="output" class="anchor" href="#output" aria-hidden="true"><span class="octicon octicon-link"></span></a>Output</h2>
 
 <p>See details in <a href="https://github.com/YangLab/CIRCexplorer/blob/master/example/output_example.txt">the example file</a></p>
 
@@ -273,12 +269,12 @@ Options:
 <p><strong><em>Note: The first 12 columns are in <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1">BED12 format</a>.</em></strong></p>
 
 <h2>
-<a name="citation" class="anchor" href="#citation"><span class="octicon octicon-link"></span></a>Citation</h2>
+<a id="citation" class="anchor" href="#citation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Citation</h2>
 
 <p><strong><a href="http://www.sciencedirect.com/science/article/pii/S0092867414011118">Zhang et al., Complementary Sequence-Mediated Exon Circularization, Cell (2014), 159:134-147</a></strong></p>
 
 <h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Copyright (C) 2014 YangLab.  See the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/LICENSE.txt">LICENSE</a>
 file for license rights and limitations (MIT).</p>
