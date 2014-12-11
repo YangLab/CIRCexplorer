@@ -1,3 +1,9 @@
+## 1.0.6 (2014-12-11)
+
+Bugfixes:
+
+* bug that prints redundant circular RNA information
+
 ## 1.0.5 (2014-11-23)
 
 Improvements:

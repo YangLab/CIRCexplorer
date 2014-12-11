@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.0.5 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.0.6 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -19,7 +19,7 @@ with pool gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.0.5'
+__version__ = '1.0.6'
 
 from docopt import docopt
 import sys
@@ -300,7 +300,7 @@ def convert_to_bed(start, end, starts, ends, start_index, end_index, edge):
 def fix_bed(fusion_file, ref, fa, no_fix):
     fusions = defaultdict(int)
     # make sure order of fusion names according to fusion_file
-    fusion_names = []
+    fusion_names = set()
     fixed_flag = defaultdict(int)  # flag to indicate realignment
     junctions = set()
     with open(fusion_file, 'r') as f:
@@ -321,19 +321,19 @@ def fix_bed(fusion_file, ref, fa, no_fix):
                 # not realign
                 if start == iso_starts[s] and end == iso_ends[e]:
                     fusions[name] += reads
-                    fusion_names.append(name)
+                    fusion_names.add(name)
                     junctions.add(junction_info)
                 # no fix mode
                 elif no_fix:
                     fusions[name] += reads
-                    fusion_names.append(name)
+                    fusion_names.add(name)
                     fixed_flag[name] += 1
                     junctions.add(junction_info)
                 # realign
                 elif check_seq(chrom, [start, iso_starts[s], end, iso_ends[e]],
                                fa):
                     fusions[name] += reads
-                    fusion_names.append(name)
+                    fusion_names.add(name)
                     fixed_flag[name] += 1
                     junctions.add(junction_info)
             else:  # ciRNAs
@@ -343,7 +343,7 @@ def fix_bed(fusion_file, ref, fa, no_fix):
                     if start == iso_ends[index]:
                         name += '|'.join(['', str(start), str(end)])
                         fusions[name] += reads
-                        fusion_names.append(name)
+                        fusion_names.add(name)
                         junctions.add(junction_info)
                     # realign
                     elif check_seq(chrom, [start, iso_ends[index], end], fa,
@@ -353,7 +353,7 @@ def fix_bed(fusion_file, ref, fa, no_fix):
                         name += '|'.join(['', str(fixed_start),
                                           str(fixed_end)])
                         fusions[name] += reads
-                        fusion_names.append(name)
+                        fusion_names.add(name)
                         fixed_flag[name] += 1
                         junctions.add(junction_info)
                 else:
@@ -361,7 +361,7 @@ def fix_bed(fusion_file, ref, fa, no_fix):
                         # not realign
                         name += '|'.join(['', str(start), str(end)])
                         fusions[name] += reads
-                        fusion_names.append(name)
+                        fusion_names.add(name)
                         junctions.add(junction_info)
                         # realign
                     elif check_seq(chrom, [end, iso_starts[index + 1], start],
@@ -371,7 +371,7 @@ def fix_bed(fusion_file, ref, fa, no_fix):
                         name += '|'.join(['', str(fixed_start),
                                           str(fixed_end)])
                         fusions[name] += reads
-                        fusion_names.append(name)
+                        fusion_names.add(name)
                         fixed_flag[name] += 1
                         junctions.add(junction_info)
     return (fusions, fusion_names, fixed_flag)
