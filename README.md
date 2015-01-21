@@ -28,7 +28,7 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 * [bedtools](https://github.com/arq5x/bedtools2)
 * [SAMtools](http://samtools.sourceforge.net)
 * [pysam](https://github.com/pysam-developers/pysam)
-* [interval](https://github.com/kepbod/interval)
+* [interval](https://github.com/kepbod/interval) (:bangbang: Note: it is not the interval package in pip, please do not install it using `pip install interval`)
 * [docopt](https://github.com/docopt/docopt)
 
 ###RNA-seq
