@@ -3,7 +3,8 @@
 
 """
 Parse STAR Chimeric.out.junction and convert it to fusion junction file
-that is acceptable for CIRCexplorer. This script was modified from https://github.com/alexdobin/STAR/blob/master/extras/scripts/filterCirc.awk
+that is acceptable for CIRCexplorer. This script was modified from 
+https://github.com/alexdobin/STAR/blob/master/extras/scripts/filterCirc.awk
 """
 
 import sys
