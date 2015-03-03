@@ -9,7 +9,10 @@ Usage: CIRCexplorer.py [options]
 Options:
     -h --help                      Show this screen.
     --version                      Show version.
-    -f FUSION --fusion=FUSION      Fusion BAM file.
+    -f FUSION --fusion=FUSION      TopHat-Fusion fusion BAM file. (used in \
+TopHat-Fusion mapping)
+    -j JUNC --junc=JUNC            STAR Chimeric junction file. (used in STAR \
+mapping)
     -g GENOME --genome=GENOME      Genome FASTA file.
     -r REF --ref=REF               Gene annotation.
     -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
@@ -19,7 +22,7 @@ with pool gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.0.6'
+__version__ = '1.1.0'
 
 from docopt import docopt
 import sys
@@ -246,9 +249,10 @@ def map_fusion_to_iso(start, end, strand, iso_info):
     else:
         for j, e in enumerate(ends):
             if e in start_points:
-                start_index = j
-                start_intron_flag = True
-                break
+                if j != len(ends) - 1:
+                    start_index = j
+                    start_intron_flag = True
+                    break
     # check ends
     for j, e in enumerate(ends):
         if e in end_points:
@@ -257,9 +261,10 @@ def map_fusion_to_iso(start, end, strand, iso_info):
     else:
         for i, s in enumerate(starts):
             if s in end_points:
-                end_index = i - 1
-                end_intron_flag = True
-                break
+                if i != 0:
+                    end_index = i - 1
+                    end_intron_flag = True
+                    break
     # ciRNAs
     if start_intron_flag and strand == '+' and end < starts[start_index + 1]:
         return ('\t'.join(['1', str(end - start), '0', 'Yes']),
@@ -427,20 +432,26 @@ def generate_bed(start, starts, ends):
     return (sizes, offsets)
 
 
-def create_temp(tmp_flag, prefix):
+def create_temp(tmp_flag, prefix, flag=1):
     if tmp_flag:
         temp_dir = os.getcwd()
-        temp1 = temp_dir + '/%s_fusion_junction_info.txt' % prefix
+        if flag:
+            temp1 = temp_dir + '/%s_fusion_junction_info.txt' % prefix
         temp2 = temp_dir + '/%s_annotated_junction_info.txt' % prefix
     else:
         temp_dir = tempfile.mkdtemp()
-        temp1 = temp_dir + '/tmp1'
+        if flag:
+            temp1 = temp_dir + '/tmp1'
         temp2 = temp_dir + '/tmp2'
-    return (temp_dir, temp1, temp2)
+    if flag:
+        return (temp_dir, temp1, temp2)
+    else:
+        return(temp_dir, temp2)
 
 
-def delete_temp(temp_dir, temp1, temp2):
-    os.remove(temp1)
+def delete_temp(temp_dir, temp1, temp2, flag=1):
+    if flag:
+        os.remove(temp1)
     os.remove(temp2)
     os.rmdir(temp_dir)
 
@@ -449,17 +460,22 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:
         sys.exit(__doc__)
     options = docopt(__doc__, version=__version__)
-    parameters = ('--fusion', '--genome', '--ref')
+    parameters = ('--genome', '--ref')
     miss_parameters = []
     for arg in parameters:
         if not options[arg]:
             miss_parameters.append(arg)
     if miss_parameters:
         sys.exit('Lack required option: ' + ' '.join(miss_parameters))
-    try:
-        fusion_bam = pysam.Samfile(options['--fusion'], 'rb')
-    except:
-        sys.exit('Please make sure %s is a BAM file!' % options['--fusion'])
+    if options['--fusion'] and not options['--junc']:
+        try:
+            fusion_bam = pysam.Samfile(options['--fusion'], 'rb')
+        except:
+            sys.exit('Please make sure %s is BAM file!' % options['--fusion'])
+    elif not options['--junc'] and not options['--fusion']:
+        sys.exit('--fusion or --junc should be used!')
+    elif options['--junc'] and options['--fusion']:
+        sys.exit('Could not use --fusion and --junc simultaneously!')
     try:
         genome_fa = pysam.Fastafile(options['--genome'])
     except:
@@ -468,10 +484,17 @@ if __name__ == '__main__':
     ref_f = options['--ref']
     output_prefix = options['--output']
     output = output_prefix + '_circ.txt'
-    temp_dir, temp1, temp2 = create_temp(options['--tmp'], output_prefix)
     print('Start CIRCexplorer %s' % __version__)
-    convert_fusion(fusion_bam, temp1)
+    if options['--junc']:
+        temp1 = options['--junc']
+        temp_dir, temp2 = create_temp(options['--tmp'], output_prefix, 0)
+    else:
+        temp_dir, temp1, temp2 = create_temp(options['--tmp'], output_prefix)
+        convert_fusion(fusion_bam, temp1)
     annotate_fusion(ref_f, temp1, temp2)
     fix_fusion(ref_f, genome_fa, temp2, output, options['--no-fix'])
     if not options['--tmp']:
-        delete_temp(temp_dir, temp1, temp2)
+        if options['--junc']:
+            delete_temp(temp_dir, temp1, temp2, 0)
+        else:
+            delete_temp(temp_dir, temp1, temp2)

@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.0.6
+Version: 1.1.0
 
-Last Modified: 2014-12-11
+Last Modified: 2015-2-3
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -23,8 +23,15 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 
 ###Software / Package
 
-* [TopHat](http://ccb.jhu.edu/software/tophat/index.shtml) 2.0.9
-* [TopHat-Fusion](http://ccb.jhu.edu/software/tophat/fusion_index.html) included in TopHat 2.0.9
+####Aligner
+
+* TopHat & TopHat-Fusion
+    + [TopHat](http://ccb.jhu.edu/software/tophat/index.shtml) 2.0.9
+    + [TopHat-Fusion](http://ccb.jhu.edu/software/tophat/fusion_index.html) included in TopHat 2.0.9
+* STAR
+    + [STAR](https://github.com/alexdobin/STAR) 2.4.0j
+
+####Others
 * [bedtools](https://github.com/arq5x/bedtools2)
 * [SAMtools](http://samtools.sourceforge.net)
 * [pysam](https://github.com/pysam-developers/pysam)
@@ -35,6 +42,13 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 
 The [poly(A)−/ribo− RNA-seq](http://genomebiology.com/2011/12/2/R16) is recommended. If you want to obtain more circular
 RNAs, [RNase R treatment](http://www.sciencedirect.com/science/article/pii/S109727651300590X) could be performed.
+
+###Aligner
+
+CIRCexplorer was originally developed as a circular RNA analysis toolkit supporting TopHat & TopHat-Fusion. After version 1.1.0, it also supports STAR.
+
+####TopHat & TopHat-Fusion
+
 To obtain junction reads for circular RNAs, two-step mapping strategy was exploited:
 
 * Multiple mapping with TopHat
@@ -54,6 +68,10 @@ bamToFastq -i tophat/unmapped.bam -fq tophat/unmapped.fastq
 ```bash
 tophat2 -o tophat_fusion -p 15 --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq
 ```
+
+####STAR
+
+To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a positive value. For more details about STAR, please refer to [STAR manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf).
 
 ##Usage
 
@@ -75,8 +93,24 @@ Options:
 
 ###Example
 
+####TopHat & TopHat-Fusion
+
 ```bash
 CIRCexplorer.py -f tophat_fusion/accepted_hits.bam -g hg19.fa -r ref.txt
+```
+
+####STAR
+
+* convert `Chimeric.out.junction` to `fusion_junction.txt` (`star_parse.py` was modified from [filterCirc.awk](https://github.com/alexdobin/STAR/blob/master/extras/scripts/filterCirc.awk)
+
+```bash
+star_parse.py Chimeric.out.junction fusion_junction.txt
+```
+
+* parse fusion_junction.txt
+
+```bash
+CIRCexplorer.py -j fusion_junction.txt -g hg19.fa -r ref.txt
 ```
 
 ###Note

@@ -1,3 +1,13 @@
+## 1.1.0 (2015-2-3)
+
+Bugfixes:
+
+* bug that causes a crash when parsing ciRNA junctions
+
+Improvements:
+
+* support aligner STAR
+
 ## 1.0.6 (2014-12-11)
 
 Bugfixes:
