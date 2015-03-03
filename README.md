@@ -23,7 +23,7 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 
 ###Software / Package
 
-####Aligner
+####TopHat or STAR
 
 * TopHat & TopHat-Fusion
     + [TopHat](http://ccb.jhu.edu/software/tophat/index.shtml) 2.0.9
@@ -76,14 +76,15 @@ To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a posi
 ##Usage
 
 ```bash
-CIRCexplorer.py -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.0 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
 Options:
     -h --help                      Show this screen.
     --version                      Show version.
-    -f FUSION --fusion=FUSION      Fusion BAM file.
+    -f FUSION --fusion=FUSION      TopHat-Fusion fusion BAM file. (used in TopHat-Fusion mapping)
+    -j JUNC --junc=JUNC            STAR Chimeric junction file. (used in STAR mapping)
     -g GENOME --genome=GENOME      Genome FASTA file.
     -r REF --ref=REF               Gene annotation.
     -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
@@ -101,13 +102,13 @@ CIRCexplorer.py -f tophat_fusion/accepted_hits.bam -g hg19.fa -r ref.txt
 
 ####STAR
 
-* convert `Chimeric.out.junction` to `fusion_junction.txt` (`star_parse.py` was modified from [filterCirc.awk](https://github.com/alexdobin/STAR/blob/master/extras/scripts/filterCirc.awk)
+* convert `Chimeric.out.junction` to `fusion_junction.txt` (`star_parse.py` was modified from STAR [filterCirc.awk](https://github.com/alexdobin/STAR/blob/master/extras/scripts/filterCirc.awk))
 
 ```bash
 star_parse.py Chimeric.out.junction fusion_junction.txt
 ```
 
-* parse fusion_junction.txt
+* parse `fusion_junction.txt`
 
 ```bash
 CIRCexplorer.py -j fusion_junction.txt -g hg19.fa -r ref.txt
