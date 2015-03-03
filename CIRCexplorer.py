@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.0.6 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.0 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
