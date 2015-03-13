@@ -35,9 +35,9 @@
 
 <p>CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.</p>
 
-<p>Version: 1.0.6</p>
+<p>Version: 1.1.0</p>
 
-<p>Last Modified: 2014-12-11</p>
+<p>Last Modified: 2015-2-3</p>
 
 <p>Authors: Xiao-Ou Zhang (<a href="mailto:zhangxiaoou@picb.ac.cn">zhangxiaoou@picb.ac.cn</a>), Li Yang (<a href="mailto:liyang@picb.ac.cn">liyang@picb.ac.cn</a>)</p>
 
@@ -52,20 +52,47 @@ see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.m
 <p><img src="https://raw.githubusercontent.com/YangLab/CIRCexplorer/master/flow.jpg" alt="pipeline"></p>
 
 <h2>
+<a id="notice" class="anchor" href="#notice" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notice</h2>
+
+<p>CIRCexplorer is now only a circular RNA annotating tool, and it parses fusion junction information from mapping results of other aligners. The result of circular RNA annotating is directly dependent on the mapping strategy of aligners. Different aligners may have different circular RNA annotations. CIRCexplorer is now only in charge of giving fusion junctions a correct gene annotation. Other functions and supports for more aligners are under tensive developments. Thanks for your supports and understanding!</p>
+
+<h2>
 <a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
 
 <h3>
 <a id="software--package" class="anchor" href="#software--package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Software / Package</h3>
+
+<h4>
+<a id="tophat-or-star" class="anchor" href="#tophat-or-star" aria-hidden="true"><span class="octicon octicon-link"></span></a>TopHat or STAR</h4>
+
+<ul>
+<li>TopHat &amp; TopHat-Fusion
 
 <ul>
 <li>
 <a href="http://ccb.jhu.edu/software/tophat/index.shtml">TopHat</a> 2.0.9</li>
 <li>
 <a href="http://ccb.jhu.edu/software/tophat/fusion_index.html">TopHat-Fusion</a> included in TopHat 2.0.9</li>
+</ul>
+</li>
+<li>STAR
+
+<ul>
+<li>
+<a href="https://github.com/alexdobin/STAR">STAR</a> 2.4.0j</li>
+</ul>
+</li>
+</ul>
+
+<h4>
+<a id="others" class="anchor" href="#others" aria-hidden="true"><span class="octicon octicon-link"></span></a>Others</h4>
+
+<ul>
 <li><a href="https://github.com/arq5x/bedtools2">bedtools</a></li>
 <li><a href="http://samtools.sourceforge.net">SAMtools</a></li>
 <li><a href="https://github.com/pysam-developers/pysam">pysam</a></li>
-<li><a href="https://github.com/kepbod/interval">interval</a></li>
+<li>
+<a href="https://github.com/kepbod/interval">interval</a> (<img class="emoji" title=":bangbang:" alt=":bangbang:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/203c.png" height="20" width="20" align="absmiddle"> Note: it is not the interval package in pip, please do not install it using <code>pip install interval</code>)</li>
 <li><a href="https://github.com/docopt/docopt">docopt</a></li>
 </ul>
 
@@ -73,8 +100,17 @@ see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.m
 <a id="rna-seq" class="anchor" href="#rna-seq" aria-hidden="true"><span class="octicon octicon-link"></span></a>RNA-seq</h3>
 
 <p>The <a href="http://genomebiology.com/2011/12/2/R16">poly(A)−/ribo− RNA-seq</a> is recommended. If you want to obtain more circular
-RNAs, <a href="http://www.sciencedirect.com/science/article/pii/S109727651300590X">RNase R treatment</a> could be performed.
-To obtain junction reads for circular RNAs, two-step mapping strategy was exploited:</p>
+RNAs, <a href="http://www.sciencedirect.com/science/article/pii/S109727651300590X">RNase R treatment</a> could be performed.</p>
+
+<h3>
+<a id="aligner" class="anchor" href="#aligner" aria-hidden="true"><span class="octicon octicon-link"></span></a>Aligner</h3>
+
+<p>CIRCexplorer was originally developed as a circular RNA analysis toolkit supporting TopHat &amp; TopHat-Fusion. After version 1.1.0, it also supports STAR.</p>
+
+<h4>
+<a id="tophat--tophat-fusion" class="anchor" href="#tophat--tophat-fusion" aria-hidden="true"><span class="octicon octicon-link"></span></a>TopHat &amp; TopHat-Fusion</h4>
+
+<p>To obtain junction reads for circular RNAs, two-step mapping strategy was exploited:</p>
 
 <ul>
 <li>Multiple mapping with TopHat</li>
@@ -94,17 +130,23 @@ To obtain junction reads for circular RNAs, two-step mapping strategy was exploi
 
 <div class="highlight highlight-bash"><pre>tophat2 -o tophat_fusion -p 15 --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq</pre></div>
 
+<h4>
+<a id="star" class="anchor" href="#star" aria-hidden="true"><span class="octicon octicon-link"></span></a>STAR</h4>
+
+<p>To detect fusion junctions with STAR, <code>--chimSegmentMin</code> should be set to a positive value. For more details about STAR, please refer to <a href="https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf">STAR manual</a>.</p>
+
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<div class="highlight highlight-bash"><pre>CIRCexplorer.py -- circular RNA analysis toolkits.
+<div class="highlight highlight-bash"><pre>CIRCexplorer.py 1.1.0 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
 Options:
     -h --help                      Show this screen.
     --version                      Show version.
-    -f FUSION --fusion=FUSION      Fusion BAM file.
+    -f FUSION --fusion=FUSION      TopHat-Fusion fusion BAM file. (used <span class="pl-k">in</span> TopHat-Fusion mapping)
+    -j JUNC --junc=JUNC            STAR Chimeric junction file. (used <span class="pl-k">in</span> STAR mapping)
     -g GENOME --genome=GENOME      Genome FASTA file.
     -r REF --ref=REF               Gene annotation.
     -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
@@ -114,7 +156,26 @@ Options:
 <h3>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
 
+<h4>
+<a id="tophat--tophat-fusion-1" class="anchor" href="#tophat--tophat-fusion-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>TopHat &amp; TopHat-Fusion</h4>
+
 <div class="highlight highlight-bash"><pre>CIRCexplorer.py -f tophat_fusion/accepted_hits.bam -g hg19.fa -r ref.txt</pre></div>
+
+<h4>
+<a id="star-1" class="anchor" href="#star-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>STAR</h4>
+
+<ul>
+<li>convert <code>Chimeric.out.junction</code> to <code>fusion_junction.txt</code> (<code>star_parse.py</code> was modified from STAR <a href="https://github.com/alexdobin/STAR/blob/master/extras/scripts/filterCirc.awk">filterCirc.awk</a>)</li>
+</ul>
+
+<div class="highlight highlight-bash"><pre>star_parse.py Chimeric.out.junction fusion_junction.txt</pre></div>
+
+<ul>
+<li>parse <code>fusion_junction.txt</code>
+</li>
+</ul>
+
+<div class="highlight highlight-bash"><pre>CIRCexplorer.py -j fusion_junction.txt -g hg19.fa -r ref.txt</pre></div>
 
 <h3>
 <a id="note" class="anchor" href="#note" aria-hidden="true"><span class="octicon octicon-link"></span></a>Note</h3>
