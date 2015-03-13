@@ -19,6 +19,10 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 
 ![pipeline](https://raw.githubusercontent.com/YangLab/CIRCexplorer/master/flow.jpg)
 
+## Notice
+
+CIRCexplorer is now only a circular RNA annotating tool, and it parses fusion junction information from mapping results of other aligners. The result of circular RNA annotating is directly dependent on the mapping strategy of aligners. Different aligners may have different circular RNA annotations. CIRCexplorer is now only in charge of giving fusion junctions a correct gene annotation. Other functions and supports for more aligners are under tensive developments. Thanks for your supports and understanding!
+
 ##Prerequisites
 
 ###Software / Package
