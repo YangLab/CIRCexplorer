@@ -80,7 +80,7 @@ To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a posi
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.0 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.1 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
