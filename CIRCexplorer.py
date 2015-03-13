@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.1.0 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.1 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -22,7 +22,7 @@ with pool gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 from docopt import docopt
 import sys
@@ -155,7 +155,7 @@ def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
                 intron = '|'.join([left_intron, right_intron])
                 bed = '\t'.join([chrom, start, end, name, fixed, strand, start,
                                  start, '0,0,0', length, sizes, offsets,
-                                 reads, 'No', gene, iso, intron])
+                                 reads, 'circRNA', gene, iso, intron])
             else:  # ciRNAs
                 index, start, end = index.split('|')
                 size = str(int(end) - int(start))
@@ -163,7 +163,7 @@ def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
                 intron = '%s:%d-%d' % (chrom, ends[index], starts[index + 1])
                 bed = '\t'.join([chrom, start, end, name, fixed, strand, start,
                                  start, '0,0,0', '1', size, '0',
-                                 reads, 'Yes', gene, iso, intron])
+                                 reads, 'ciRNA', gene, iso, intron])
             outf.write(bed + '\n')
     print('Fixed %d fusion junctions!' % total)
 
@@ -267,11 +267,11 @@ def map_fusion_to_iso(start, end, strand, iso_info):
                     break
     # ciRNAs
     if start_intron_flag and strand == '+' and end < starts[start_index + 1]:
-        return ('\t'.join(['1', str(end - start), '0', 'Yes']),
+        return ('\t'.join(['1', str(end - start), '0', 'ciRNA']),
                 str(start_index), False)
     elif end_intron_flag and strand == '-' and start > ends[end_index]:
-        return ('\t'.join(['1', str(end - start), '0', 'Yes']), str(end_index),
-                False)
+        return ('\t'.join(['1', str(end - start), '0', 'ciRNA']),
+                str(end_index), False)
     # back spliced exons
     elif (start_index is not None and end_index is not None and
           not start_intron_flag and not end_intron_flag):
@@ -298,8 +298,8 @@ def convert_to_bed(start, end, starts, ends, start_index, end_index, edge):
     block_starts = ','.join(block_starts)
     block_sizes = ','.join(block_sizes)
     index = ','.join([start_index, end_index])
-    return ('\t'.join([str(length), block_sizes, block_starts, 'No']), index,
-            edge)
+    return ('\t'.join([str(length), block_sizes, block_starts, 'circRNA']),
+            index, edge)
 
 
 def fix_bed(fusion_file, ref, fa, no_fix):
@@ -319,7 +319,7 @@ def fix_bed(fusion_file, ref, fa, no_fix):
                 continue
             reads = int(line.split()[3].split('/')[1])
             flag, gene, iso, index = line.split()[-4:]
-            flag = True if flag == 'Yes' else False
+            flag = True if flag == 'ciRNA' else False
             name = '\t'.join([gene, iso, chrom, strand, index])
             iso_starts, iso_ends = ref['\t'.join([gene, iso, chrom, strand])]
             if not flag:  # back spliced exons

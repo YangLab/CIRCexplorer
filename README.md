@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.0
+Version: 1.1.1
 
-Last Modified: 2015-2-3
+Last Modified: 2015-3-13
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -157,7 +157,7 @@ See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/m
 | exonSizes   | Exon sizes                            |
 | exonOffsets | Exon offsets                          |
 | readNumber  | Number of junction reads              |
-| flag        | 'Yes' for ciRNA, and 'No' for circRNA |
+| circType    | 'Yes' for ciRNA, and 'No' for circRNA (before 1.1.0); 'circRNA' or 'ciRNA' (after 1.1.1)|
 | geneName    | Name of gene                          |
 | isoformName | Name of isoform                       |
 | flankIntron | Left intron/Right intron              |

@@ -1,3 +1,9 @@
+## 1.1.1 (2015-3-13)
+
+Improvements:
+
+* adjust some misleading labels
+
 ## 1.1.0 (2015-2-3)
 
 Bugfixes:
