@@ -15,6 +15,8 @@ Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 To see what has changed in recent versions of CIRCexplorer,
 see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md).
 
+[FAQ](https://github.com/YangLab/CIRCexplorer/wiki/FAQ)
+
 ##A schematic flow shows the pipeline
 
 ![pipeline](https://raw.githubusercontent.com/YangLab/CIRCexplorer/master/flow.jpg)
