@@ -18,7 +18,7 @@ mapping)
     -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
     --tmp                          Keep temporary files.
     --no-fix                       No-fix mode (useful for species \
-with pool gene annotations)
+with poor gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
