@@ -95,7 +95,7 @@ Options:
     -r REF --ref=REF               Gene annotation.
     -o PREFIX --output=PREFIX      Output prefix [default: CIRCexplorer].
     --tmp                          Keep temporary files.
-    --no-fix                       No-fix mode (useful for species with pool gene annotations)
+    --no-fix                       No-fix mode (useful for species with poor gene annotations)
 ```
 
 ###Example
