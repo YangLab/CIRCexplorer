@@ -41,7 +41,7 @@ CIRCexplorer is now only a circular RNA annotating tool, and it parses fusion ju
 * [bedtools](https://github.com/arq5x/bedtools2)
 * [SAMtools](http://samtools.sourceforge.net)
 * [pysam](https://github.com/pysam-developers/pysam)
-* [interval](https://github.com/kepbod/interval) (:bangbang: Note: it is not the interval package in pip, please do not install it using `pip install interval`)
+* [interval](https://github.com/kepbod/interval) (:bangbang: Note: it is not the interval package in PyPI, please do not install it using `pip install interval`)
 * [docopt](https://github.com/docopt/docopt)
 
 ###RNA-seq
