@@ -466,7 +466,7 @@ if __name__ == '__main__':
         if not options[arg]:
             miss_parameters.append(arg)
     if miss_parameters:
-        sys.exit('Lack required option: ' + ' '.join(miss_parameters))
+        sys.exit('Miss required option: ' + ' '.join(miss_parameters))
     if options['--fusion'] and not options['--junc']:
         try:
             fusion_bam = pysam.Samfile(options['--fusion'], 'rb')
