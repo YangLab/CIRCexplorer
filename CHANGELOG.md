@@ -1,3 +1,9 @@
+## 1.1.2 (2015-6-18)
+
+Improvements:
+
+* add script fetch_ref.py
+
 ## 1.1.1 (2015-3-13)
 
 Improvements:

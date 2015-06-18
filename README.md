@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.1
+Version: 1.1.2
 
-Last Modified: 2015-3-13
+Last Modified: 2015-6-18
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -82,7 +82,7 @@ To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a posi
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.1 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.2 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -139,6 +139,18 @@ CIRCexplorer.py -j fusion_junction.txt -g hg19.fa -r ref.txt
 | exonEnds    | Exon end positions            |
 
 * hg19.fa is genome sequence in FASTA format and indexed (using `samtools faidx` from [SAMtools](http://samtools.sourceforge.net))
+
+* You could use fetch_ucsc.py script to download relevant ref.txt (Known Genes, RefSeq or Ensembl) and the genome fasta file for hg19 or mm10 from UCSC.
+
+```bash
+fetch_ucsc.py human/mouse ref/kg/ens/fa out
+```
+
+Example (download hg19 RefSeq gene annotation file):
+
+```bash
+fetch_ucsc.py human ref ref.txt
+```
 
 ##Output
 
