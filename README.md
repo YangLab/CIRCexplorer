@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.2
+Version: 1.1.3
 
-Last Modified: 2015-6-18
+Last Modified: 2015-7-31
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -40,7 +40,7 @@ CIRCexplorer is now only a circular RNA annotating tool, and it parses fusion ju
 ####Others
 * [bedtools](https://github.com/arq5x/bedtools2)
 * [SAMtools](http://samtools.sourceforge.net)
-* [pysam](https://github.com/pysam-developers/pysam)
+* [pysam](https://github.com/pysam-developers/pysam) 0.8.2
 * [interval](https://github.com/kepbod/interval) (:bangbang: Note: it is not the interval package in PyPI, please do not install it using `pip install interval`)
 * [docopt](https://github.com/docopt/docopt)
 
@@ -82,7 +82,7 @@ To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a posi
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.2 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.3 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 

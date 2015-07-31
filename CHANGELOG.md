@@ -1,3 +1,13 @@
+## 1.1.3 (2015-7-31)
+
+Bugfixes:
+
+* bug that removes fusion junction reads aligned to first/last exons
+
+Improvements:
+
+* support pysam 0.8.2
+
 ## 1.1.2 (2015-6-18)
 
 Improvements:

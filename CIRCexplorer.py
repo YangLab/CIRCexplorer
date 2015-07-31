@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.1.2 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.3 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -22,7 +22,7 @@ with poor gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 
 from docopt import docopt
 import sys
@@ -77,7 +77,6 @@ def annotate_fusion(ref_f, input_f, output_f):
                 iso = list(filter(lambda x: x.startswith('iso'), itl[2:]))
                 # for each overlapped fusion junction
                 for fus in itl[(2 + len(iso)):]:
-                    flag = 0
                     reads = fus.split()[1]
                     fus_start, fus_end = fusion_index[fus]
                     edge_annotations = []  # first or last exon flag
@@ -106,14 +105,12 @@ def annotate_fusion(ref_f, input_f, output_f):
                                              index])
                             if not edge:  # not first or last exon
                                 outf.write(bed + '\n')
-                                flag += 1
+                                total.add(fus)
                             else:  # first or last exon
                                 edge_annotations.append(bed)
-                    if not flag and edge_annotations:  # first or last exon
+                    if edge_annotations:  # first or last exon
                         for bed in edge_annotations:
                             outf.write(bed + '\n')
-                        total.add(fus)
-                    elif flag:
                         total.add(fus)
     print('Annotated %d fusion junctions!' % len(total))
 
@@ -173,20 +170,20 @@ def parse_bam(bam):
     for read in bam:
         if read.is_secondary:  # not the primary alignment
             continue
-        tags = dict(read.tags)
-        if 'XF' not in tags:  # not fusion junctions
+        if not read.has_tag('XF'):  # not fusion junctions
             continue
-        chr1, chr2 = tags['XF'].split()[1].split('-')
+        chr1, chr2 = read.get_tag('XF').split()[1].split('-')
         if chr1 != chr2:  # not on the same chromosome
             continue
         strand = '+' if not read.is_reverse else '-'
-        if read.qname not in fusions:  # first fragment
-            fusions[read.qname] = [chr1, strand, read.pos, read.aend]
+        if read.query_name not in fusions:  # first fragment
+            fusions[read.query_name] = [chr1, strand, read.reference_start,
+                                        read.reference_end]
         else:  # second fragment
-            if chr1 == fusions[read.qname][0] \
-               and strand == fusions[read.qname][1]:
-                yield [chr1, strand, read.pos, read.aend]
-                yield fusions[read.qname]
+            if chr1 == fusions[read.query_name][0] \
+               and strand == fusions[read.query_name][1]:
+                yield [chr1, strand, read.reference_start, read.reference_end]
+                yield fusions[read.query_name]
 
 
 def parse_ref1(ref_file):
@@ -469,7 +466,7 @@ if __name__ == '__main__':
         sys.exit('Miss required option: ' + ' '.join(miss_parameters))
     if options['--fusion'] and not options['--junc']:
         try:
-            fusion_bam = pysam.Samfile(options['--fusion'], 'rb')
+            fusion_bam = pysam.AlignmentFile(options['--fusion'], 'rb')
         except:
             sys.exit('Please make sure %s is BAM file!' % options['--fusion'])
     elif not options['--junc'] and not options['--fusion']:
@@ -477,7 +474,7 @@ if __name__ == '__main__':
     elif options['--junc'] and options['--fusion']:
         sys.exit('Could not use --fusion and --junc simultaneously!')
     try:
-        genome_fa = pysam.Fastafile(options['--genome'])
+        genome_fa = pysam.FastaFile(options['--genome'])
     except:
         sys.exit('Please make sure %s is a Fasta file and indexed!'
                  % options['--genome'])
