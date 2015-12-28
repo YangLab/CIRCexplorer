@@ -162,7 +162,7 @@ See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/m
 | start       | Start of junction                     |
 | end         | End of junction                       |
 | name        | Circular RNA/Junction reads           |
-| score       | non-zero to indicate realignment      |
+| score       | Flag to indicate realignment of fusion junctions      |
 | strand      | + or - for strand                     |
 | thickStart  | No meaning                            |
 | thickEnd    | No meaning                            |
