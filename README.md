@@ -4,11 +4,13 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.3
+Version: 1.1.4
 
 Last Modified: 2015-7-31
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
+
+Maintainer: Xu-Kai Ma (maxukai@picb.ac.cn)
 
 [Download the latest stable version of CIRCexplorer](http://github.com/Yanglab/CIRCexplorer/releases)
 

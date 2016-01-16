@@ -1,3 +1,11 @@
+## 1.1.4 (2016-1-16)
+
+Improvements:
+
+* check pysam version at tuntime
+* index fa file automatically if it hasn't been indexed
+* integrate interval.py into it
+
 ## 1.1.3 (2015-7-31)
 
 Bugfixes:

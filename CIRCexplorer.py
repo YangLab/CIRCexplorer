@@ -25,10 +25,11 @@ __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
 __version__ = '1.1.3'
 
 from docopt import docopt
+import re
 import sys
 import pysam
 from collections import defaultdict
-from interval import Interval
+from genomic_interval import Interval
 import tempfile
 import os
 
@@ -454,6 +455,15 @@ def delete_temp(temp_dir, temp1, temp2, flag=1):
 
 
 if __name__ == '__main__':
+    pysamVersion = re.findall(r'[\d.]+', pysam.__version__)[0]
+    pysamVersion = [int(i) for i in pysamVersion.split('.')]
+    if pysamVersion[0] > 0:
+        print('Your pysam version >= 1.xx, This program may bot work rightly.')
+    elif pysamVersion[1] <= 7:
+        sys.exit('Your pysam version too low! It should be >= 0.8.2')
+    elif pysamVersion[1] == 8 and pysamVersion[2] < 2:
+        sys.exit('Your pysam version too low! It should be >= 0.8.2')
+    
     if len(sys.argv) == 1:
         sys.exit(__doc__)
     options = docopt(__doc__, version=__version__)
@@ -473,11 +483,10 @@ if __name__ == '__main__':
         sys.exit('--fusion or --junc should be used!')
     elif options['--junc'] and options['--fusion']:
         sys.exit('Could not use --fusion and --junc simultaneously!')
-    try:
-        genome_fa = pysam.FastaFile(options['--genome'])
-    except:
-        sys.exit('Please make sure %s is a Fasta file and indexed!'
-                 % options['--genome'])
+
+    if not os.path.isfile(options['--genome'] + '.fai'):
+        pysam.faidx(options['--genome'])
+    genome_fa = pysam.FastaFile(options['--genome'])
     ref_f = options['--ref']
     output_prefix = options['--output']
     output = output_prefix + '_circ.txt'
