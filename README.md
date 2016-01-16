@@ -6,7 +6,7 @@ CIRCexplorer is a combined strategy to identify junction reads from back spliced
 
 Version: 1.1.4
 
-Last Modified: 2015-7-31
+Last Modified: 2016-1-16
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
