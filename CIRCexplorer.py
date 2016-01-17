@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.1.3 -- circular RNA analysis toolkit.
+CIRCexplorer.py 1.1.4 -- circular RNA analysis toolkit.
 
 Usage: CIRCexplorer.py [options]
 
@@ -22,7 +22,7 @@ with poor gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.1.3'
+__version__ = '1.1.4'
 
 from docopt import docopt
 import re
