@@ -1,9 +1,15 @@
+## 1.1.5 (2016-1-20)
+
+Improvements:
+
+* use setuptools instead of distutils in setup.py, fix #11
+
 ## 1.1.4 (2016-1-16)
 
 Improvements:
 
-* check pysam version at tuntime
-* index fa file automatically if it hasn't been indexed
+* check pysam version at running time
+* index fa file automatically if it has not been indexed
 * integrate interval.py into it
 
 ## 1.1.3 (2015-7-31)

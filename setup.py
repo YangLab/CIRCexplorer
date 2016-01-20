@@ -1,17 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(name='CIRCexplorer',
-      version='1.1.4',
+      version='1.1.5',
       description='Circular RNA analysis toolkits',
       author='Xiao-Ou Zhang',
       author_email='zhangxiaoou@picb.ac.cn',
-      maintainer='YangLab',
-      maintainer_email='rnacomplex@gmail.com',
+      maintainer='Xu-Kai Ma',
+      maintainer_email='maxukai@picb.ac.cn',
       url='https://github.com/YangLab/CIRCexplorer',
       license='MIT',
-      scripts=['CIRCexplorer.py', 'star_parse.py', 'fetch_ucsc.py'],
-      py_modules=['genomic_interval'],
+      packages=find_packages(),
+      install_requires=[
+          'pysam>=0.8.2',
+          'docopt'
+      ],
+      entry_points={
+          'console_scripts': [
+              'CIRCexplorer.py=circ.CIRCexplorer:main',
+              'fetch_ucsc.py=circ.fetch_ucsc:main',
+              'star_parse.py=circ.star_parse:main'
+          ],
+      },
       )

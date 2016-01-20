@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.4
+Version: 1.1.5
 
-Last Modified: 2016-1-16
+Last Modified: 2016-1-20
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -36,12 +36,11 @@ CIRCexplorer is now only a circular RNA annotating tool, and it parses fusion ju
 * TopHat & TopHat-Fusion
     + [TopHat](http://ccb.jhu.edu/software/tophat/index.shtml) 2.0.9
     + [TopHat-Fusion](http://ccb.jhu.edu/software/tophat/fusion_index.html) included in TopHat 2.0.9
-* STAR
+* STAR (optional)
     + [STAR](https://github.com/alexdobin/STAR) 2.4.0j
 
 ####Others
 * [bedtools](https://github.com/arq5x/bedtools2)
-* [SAMtools](http://samtools.sourceforge.net)
 * [pysam](https://github.com/pysam-developers/pysam) >=0.8.2
 * [docopt](https://github.com/docopt/docopt)
 
@@ -83,7 +82,7 @@ To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a posi
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.3 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.5 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -139,7 +138,7 @@ CIRCexplorer.py -j fusion_junction.txt -g hg19.fa -r ref.txt
 | exonStarts  | Exon start positions          |
 | exonEnds    | Exon end positions            |
 
-* hg19.fa is genome sequence in FASTA format and indexed (using `samtools faidx` from [SAMtools](http://samtools.sourceforge.net))
+* hg19.fa is genome sequence in FASTA format.
 
 * You could use fetch_ucsc.py script to download relevant ref.txt (Known Genes, RefSeq or Ensembl) and the genome fasta file for hg19 or mm10 from UCSC.
 
@@ -185,5 +184,5 @@ See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/m
 
 ##License
 
-Copyright (C) 2014 YangLab.  See the [LICENSE](https://github.com/YangLab/CIRCexplorer/blob/master/LICENSE.txt)
+Copyright (C) 2014-2016 YangLab.  See the [LICENSE](https://github.com/YangLab/CIRCexplorer/blob/master/LICENSE.txt)
 file for license rights and limitations (MIT).

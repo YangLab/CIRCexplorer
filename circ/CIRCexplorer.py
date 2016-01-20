@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.1.4 -- circular RNA analysis toolkit.
+CIRCexplorer.py 1.1.5 -- circular RNA analysis toolkit.
 
 Usage: CIRCexplorer.py [options]
 
@@ -22,10 +22,9 @@ with poor gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.1.4'
+__version__ = '1.1.5'
 
 from docopt import docopt
-import re
 import sys
 import pysam
 from collections import defaultdict
@@ -454,16 +453,7 @@ def delete_temp(temp_dir, temp1, temp2, flag=1):
     os.rmdir(temp_dir)
 
 
-if __name__ == '__main__':
-    pysamVersion = re.findall(r'[\d.]+', pysam.__version__)[0]
-    pysamVersion = [int(i) for i in pysamVersion.split('.')]
-    if pysamVersion[0] > 0:
-        print('Your pysam version >= 1.xx, This program may bot work rightly.')
-    elif pysamVersion[1] <= 7:
-        sys.exit('Your pysam version too low! It should be >= 0.8.2')
-    elif pysamVersion[1] == 8 and pysamVersion[2] < 2:
-        sys.exit('Your pysam version too low! It should be >= 0.8.2')
-    
+def main():
     if len(sys.argv) == 1:
         sys.exit(__doc__)
     options = docopt(__doc__, version=__version__)
@@ -504,3 +494,7 @@ if __name__ == '__main__':
             delete_temp(temp_dir, temp1, temp2, 0)
         else:
             delete_temp(temp_dir, temp1, temp2)
+
+
+if __name__ == '__main__':
+    main()
