@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.1.5 -- circular RNA analysis toolkit.
+CIRCexplorer.py 1.1.6 -- circular RNA analysis toolkit.
 
 Usage: CIRCexplorer.py [options]
 
@@ -22,7 +22,7 @@ with poor gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.1.5'
+__version__ = '1.1.6'
 
 from docopt import docopt
 import sys
@@ -134,8 +134,16 @@ def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
             name = 'circular_RNA/' + reads
             gene, iso, chrom, strand, index = fus.split()
             starts, ends = ref['\t'.join([gene, iso, chrom, strand])]
+            exon_num = len(starts)
+            intron_num = exon_num - 1
             if ',' in index:  # back spliced exons
                 s, e = [int(x) for x in index.split(',')]
+                if strand == '+':
+                    index_info = ','.join(str(x + 1)
+                                          for x in xrange(s, e + 1))
+                else:
+                    index_info = ','.join(str(exon_num - x)
+                                          for x in xrange(s, e + 1))
                 start = str(starts[s])
                 end = str(ends[e])
                 length = str(e - s + 1)
@@ -152,15 +160,21 @@ def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
                 intron = '|'.join([left_intron, right_intron])
                 bed = '\t'.join([chrom, start, end, name, fixed, strand, start,
                                  start, '0,0,0', length, sizes, offsets,
-                                 reads, 'circRNA', gene, iso, intron])
+                                 reads, 'circRNA', gene, iso, index_info,
+                                 intron])
             else:  # ciRNAs
                 index, start, end = index.split('|')
-                size = str(int(end) - int(start))
                 index = int(index)
+                if strand == '+':
+                    index_info = str(index + 1)
+                else:
+                    index_info = str(intron_num - index)
+                size = str(int(end) - int(start))
                 intron = '%s:%d-%d' % (chrom, ends[index], starts[index + 1])
                 bed = '\t'.join([chrom, start, end, name, fixed, strand, start,
                                  start, '0,0,0', '1', size, '0',
-                                 reads, 'ciRNA', gene, iso, intron])
+                                 reads, 'ciRNA', gene, iso, index_info,
+                                 intron])
             outf.write(bed + '\n')
     print('Fixed %d fusion junctions!' % total)
 

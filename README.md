@@ -4,9 +4,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.5
+Version: 1.1.6
 
-Last Modified: 2016-1-20
+Last Modified: 2016-1-22
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -82,7 +82,7 @@ To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a posi
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.5 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.6 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -174,6 +174,7 @@ See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/m
 | circType    | 'Yes' for ciRNA, and 'No' for circRNA (before 1.1.0); 'circRNA' or 'ciRNA' (after 1.1.1)|
 | geneName    | Name of gene                          |
 | isoformName | Name of isoform                       |
+| exonIndex/intronIndex | Index (start from 1) of exon (for circRNA) or intron (for ciRNA) in given isoform (newly added in 1.1.6) |
 | flankIntron | Left intron/Right intron              |
 
 ***Note: The first 12 columns are in [BED12 format](http://genome.ucsc.edu/FAQ/FAQformat.html#format1).***

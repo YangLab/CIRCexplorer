@@ -1,3 +1,9 @@
+## 1.1.6 (2016-1-22)
+
+Improvements:
+
+* add exon/intron index information
+
 ## 1.1.5 (2016-1-20)
 
 Improvements:
