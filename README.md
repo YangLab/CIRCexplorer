@@ -79,10 +79,28 @@ tophat2 -o tophat_fusion -p 15 --fusion-search --keep-fasta-order --bowtie1 --no
 
 To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a positive value. For more details about STAR, please refer to [STAR manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf).
 
+##Installation
+
+1 Download CIRCexplorer
+```bash
+git clone https://github.com/YangLab/CIRCexplorer.git
+cd CIRCexplorer
+```
+
+2 Install required packages
+```bash
+pip install -r requirements.txt
+```
+
+3 Install CIRCexplorer
+```
+python setup.py install
+```
+
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.6 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.7 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
