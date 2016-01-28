@@ -1,3 +1,9 @@
+## 1.1.7 (2016-1-28)
+
+Improvements:
+
+* add pysam version checking at running time
+
 ## 1.1.6 (2016-1-22)
 
 Improvements:

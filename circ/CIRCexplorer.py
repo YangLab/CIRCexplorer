@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-CIRCexplorer.py 1.1.6 -- circular RNA analysis toolkit.
+CIRCexplorer.py 1.1.7 -- circular RNA analysis toolkit.
 
 Usage: CIRCexplorer.py [options]
 
@@ -22,7 +22,7 @@ with poor gene annotations)
 """
 
 __author__ = 'Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn)'
-__version__ = '1.1.6'
+__version__ = '1.1.7'
 
 from docopt import docopt
 import sys
@@ -31,7 +31,7 @@ from collections import defaultdict
 from genomic_interval import Interval
 import tempfile
 import os
-
+from pkg_resources import parse_version as norm_vr
 
 def convert_fusion(fusion_bam, output_f):
     """
@@ -468,6 +468,11 @@ def delete_temp(temp_dir, temp1, temp2, flag=1):
 
 
 def main():
+
+    pysam_vr = norm_vr(pysam.__version__)
+    if pysam_vr < norm_vr('0.8.2'):
+        sys.exit('The version of pysam is too low. It should be >= 0.8.2.')
+
     if len(sys.argv) == 1:
         sys.exit(__doc__)
     options = docopt(__doc__, version=__version__)
