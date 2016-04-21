@@ -1,6 +1,9 @@
 language: python
 python:
   - "2.7"
+before_install:
+  - curl -L https://github.com/github/git-lfs/releases/download/v1.1.2/git-lfs-linux-amd64-1.1.2.tar.gz | tar -xz
+  - git-lfs-1.1.2/git-lfs pull
 install:
   - pip install python-coveralls
   - pip install -r requirements.txt
