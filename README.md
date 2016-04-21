@@ -159,16 +159,16 @@ CIRCexplorer.py -j fusion_junction.txt -g hg19.fa -r ref.txt
 
 * hg19.fa is genome sequence in FASTA format.
 
-* You could use fetch_ucsc.py script to download relevant ref.txt (Known Genes, RefSeq or Ensembl) and the genome fasta file for hg19 or mm10 from UCSC.
+* You could use fetch_ucsc.py script to download relevant ref.txt (Known Genes, RefSeq or Ensembl) and the genome fasta file for hg19, hg38 or mm10 from UCSC.
 
 ```bash
-fetch_ucsc.py human/mouse ref/kg/ens/fa out
+fetch_ucsc.py hg19/hg38/mm10 ref/kg/ens/fa out
 ```
 
 Example (download hg19 RefSeq gene annotation file):
 
 ```bash
-fetch_ucsc.py human ref ref.txt
+fetch_ucsc.py hg19 ref ref.txt
 ```
 
 ##Output
