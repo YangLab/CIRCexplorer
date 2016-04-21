@@ -33,6 +33,7 @@ import tempfile
 import os
 from pkg_resources import parse_version as norm_vr
 
+
 def convert_fusion(fusion_bam, output_f):
     """
     Extract fusion junction reads from the BAM file
@@ -468,11 +469,9 @@ def delete_temp(temp_dir, temp1, temp2, flag=1):
 
 
 def main():
-
     pysam_vr = norm_vr(pysam.__version__)
     if pysam_vr < norm_vr('0.8.2'):
         sys.exit('The version of pysam is too low. It should be >= 0.8.2.')
-
     if len(sys.argv) == 1:
         sys.exit(__doc__)
     options = docopt(__doc__, version=__version__)

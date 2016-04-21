@@ -1,3 +1,9 @@
+## 1.1.8 (2016-4-21)
+
+Improvements:
+
+* add test codes
+
 ## 1.1.7 (2016-1-28)
 
 Improvements:

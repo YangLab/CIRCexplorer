@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 setup(name='CIRCexplorer',
-      version='1.1.7',
+      version='1.1.8',
       description='Circular RNA analysis toolkits',
       author='Xiao-Ou Zhang',
       author_email='zhangxiaoou@picb.ac.cn',

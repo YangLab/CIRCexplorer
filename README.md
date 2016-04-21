@@ -1,12 +1,13 @@
 #CIRCexplorer
 
 [![Build Status](https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master)](https://travis-ci.org/YangLab/CIRCexplorer)
+[![Coverage Status](https://coveralls.io/repos/github/YangLab/CIRCexplorer/badge.svg?branch=master)](https://coveralls.io/github/YangLab/CIRCexplorer?branch=master)
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.7
+Version: 1.1.8
 
-Last Modified: 2016-1-28
+Last Modified: 2016-4-21
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -100,7 +101,7 @@ python setup.py install
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.7 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.8 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 

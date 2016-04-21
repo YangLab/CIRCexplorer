@@ -1,0 +1,5 @@
+[report]
+omit =
+    circ/star_parse.py
+    circ/fetch_ucsc.py
+    circ/genomic_interval.py
