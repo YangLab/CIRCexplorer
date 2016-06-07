@@ -2,12 +2,14 @@
 
 [![Build Status](https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master)](https://travis-ci.org/YangLab/CIRCexplorer)
 [![Coverage Status](https://coveralls.io/repos/github/YangLab/CIRCexplorer/badge.svg?branch=master)](https://coveralls.io/github/YangLab/CIRCexplorer?branch=master)
+[![PyPI version](https://badge.fury.io/py/CIRCexplorer.svg)](https://badge.fury.io/py/CIRCexplorer)
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io/recipes/circexplorer/README.html)
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.8
+Version: 1.1.9
 
-Last Modified: 2016-4-21
+Last Modified: 2016-6-7
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -82,21 +84,33 @@ To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a posi
 
 ##Installation
 
+####Option 1: using pip
+
+```bash
+pip install CIRCexplorer
+```
+
+####Option 2: via conda
+
 CIRCexplorer is available as conda package with:
 
 ```bash
 conda install circexplorer --channel bioconda
 ```
 
-or as [Docker container](https://quay.io/repository/mulled/circexplorer):
+####Option 3: from docker container
+
+[Docker container](https://quay.io/repository/mulled/circexplorer):
 
 ```bash
 docker run quay.io/mulled/circexplorer:0.1--py35_1 CIRCexplorer.py --help
 ```
 
+####Option 4: in galaxy
+
 If you have access to a [Galaxy](https://usegalaxy.org/) instance, CIRCexplorer is also available from the [Galaxy Tool Shed](https://toolshed.g2.bx.psu.edu/view/bgruening/circexplorer).
 
-You could also install CIRCexplorer from source codes:
+####Option 5: from source codes
 
 1 Download CIRCexplorer
 ```bash
@@ -117,7 +131,7 @@ python setup.py install
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.8 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.9 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 

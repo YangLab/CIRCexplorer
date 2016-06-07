@@ -1,3 +1,11 @@
+## 1.1.9 (2016-6-7)
+
+Improvements:
+
+* offer more deployment methods (PyPI, bioconda, Docker and Galaxy Tool). Thanks
+@bgruening and @anatskiy for their helps!
+
+
 ## 1.1.8 (2016-4-21)
 
 Improvements:
