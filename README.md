@@ -103,7 +103,7 @@ conda install circexplorer --channel bioconda
 [Docker container](https://quay.io/repository/mulled/circexplorer):
 
 ```bash
-docker run quay.io/mulled/circexplorer:0.1--py35_1 CIRCexplorer.py --help
+docker run -it --rm quay.io/mulled/circexplorer:1.1.9--py35_0
 ```
 
 ####Option 4: in galaxy
