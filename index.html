@@ -22,13 +22,16 @@
       <h1>
 <a id="circexplorer" class="anchor" href="#circexplorer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CIRCexplorer</h1>
 
-<p><a href="https://travis-ci.org/YangLab/CIRCexplorer"><img src="https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master" alt="Build Status"></a></p>
+<p><a href="https://travis-ci.org/YangLab/CIRCexplorer"><img src="https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/YangLab/CIRCexplorer?branch=master"><img src="https://coveralls.io/repos/github/YangLab/CIRCexplorer/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="https://badge.fury.io/py/CIRCexplorer"><img src="https://badge.fury.io/py/CIRCexplorer.svg" alt="PyPI version"></a>
+<a href="http://bioconda.github.io/recipes/circexplorer/README.html"><img src="https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square" alt="install with bioconda"></a></p>
 
 <p>CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.</p>
 
-<p>Version: 1.1.7</p>
+<p>Version: 1.1.9</p>
 
-<p>Last Modified: 2016-1-28</p>
+<p>Last Modified: 2016-6-7</p>
 
 <p>Authors: Xiao-Ou Zhang (<a href="mailto:zhangxiaoou@picb.ac.cn">zhangxiaoou@picb.ac.cn</a>), Li Yang (<a href="mailto:liyang@picb.ac.cn">liyang@picb.ac.cn</a>)</p>
 
@@ -131,6 +134,33 @@ RNAs, <a href="http://www.sciencedirect.com/science/article/pii/S109727651300590
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 
+<h4>
+<a id="option-1-using-pip" class="anchor" href="#option-1-using-pip" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 1: using pip</h4>
+
+<div class="highlight highlight-source-shell"><pre>pip install CIRCexplorer</pre></div>
+
+<h4>
+<a id="option-2-via-conda" class="anchor" href="#option-2-via-conda" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 2: via conda</h4>
+
+<p>CIRCexplorer is available as conda package with:</p>
+
+<div class="highlight highlight-source-shell"><pre>conda install circexplorer --channel bioconda</pre></div>
+
+<h4>
+<a id="option-3-from-docker-container" class="anchor" href="#option-3-from-docker-container" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 3: from docker container</h4>
+
+<p><a href="https://quay.io/repository/mulled/circexplorer">Docker container</a>:</p>
+
+<div class="highlight highlight-source-shell"><pre>docker run -it --rm quay.io/mulled/circexplorer:1.1.9--py35_0</pre></div>
+
+<h4>
+<a id="option-4-in-galaxy" class="anchor" href="#option-4-in-galaxy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 4: in galaxy</h4>
+
+<p>If you have access to a <a href="https://usegalaxy.org/">Galaxy</a> instance, CIRCexplorer is also available from the <a href="https://toolshed.g2.bx.psu.edu/view/bgruening/circexplorer">Galaxy Tool Shed</a>.</p>
+
+<h4>
+<a id="option-5-from-source-codes" class="anchor" href="#option-5-from-source-codes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 5: from source codes</h4>
+
 <p>1 Download CIRCexplorer</p>
 
 <div class="highlight highlight-source-shell"><pre>git clone https://github.com/YangLab/CIRCexplorer.git
@@ -148,7 +178,7 @@ RNAs, <a href="http://www.sciencedirect.com/science/article/pii/S109727651300590
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
 
-<div class="highlight highlight-source-shell"><pre>CIRCexplorer.py 1.1.7 -- circular RNA analysis toolkits.
+<div class="highlight highlight-source-shell"><pre>CIRCexplorer.py 1.1.9 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
@@ -251,14 +281,14 @@ Options:
 
 <ul>
 <li><p>hg19.fa is genome sequence in FASTA format.</p></li>
-<li><p>You could use fetch_ucsc.py script to download relevant ref.txt (Known Genes, RefSeq or Ensembl) and the genome fasta file for hg19 or mm10 from UCSC.</p></li>
+<li><p>You could use fetch_ucsc.py script to download relevant ref.txt (Known Genes, RefSeq or Ensembl) and the genome fasta file for hg19, hg38 or mm10 from UCSC.</p></li>
 </ul>
 
-<div class="highlight highlight-source-shell"><pre>fetch_ucsc.py human/mouse ref/kg/ens/fa out</pre></div>
+<div class="highlight highlight-source-shell"><pre>fetch_ucsc.py hg19/hg38/mm10 ref/kg/ens/fa out</pre></div>
 
 <p>Example (download hg19 RefSeq gene annotation file):</p>
 
-<div class="highlight highlight-source-shell"><pre>fetch_ucsc.py human ref ref.txt</pre></div>
+<div class="highlight highlight-source-shell"><pre>fetch_ucsc.py hg19 ref ref.txt</pre></div>
 
 <h2>
 <a id="output" class="anchor" href="#output" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Output</h2>
