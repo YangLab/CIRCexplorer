@@ -6,6 +6,7 @@ before_install:
   - git-lfs-1.1.2/git-lfs pull
 install:
   - pip install python-coveralls
+  - pip install cython
   - pip install -r requirements.txt
   - python setup.py install
 script:
