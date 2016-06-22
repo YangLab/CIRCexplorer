@@ -22,6 +22,8 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 
 [FAQ](https://github.com/YangLab/CIRCexplorer/wiki/FAQ)
 
+*After one year's tensive development, we have upgraded and extended CIRCexplorer to a new version -- [CIRCexplorer2](https://github.com/YangLab/CIRCexplorer2), with many improvements and lots of new features. Welcome to use and cite it!*
+
 ##A schematic flow shows the pipeline
 
 ![pipeline](https://raw.githubusercontent.com/YangLab/CIRCexplorer/master/flow.jpg)
