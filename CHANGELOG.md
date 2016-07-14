@@ -1,10 +1,19 @@
+## 1.1.10 (2016-7-14)
+
+Bugfixes:
+
+* case-sensitivity issue for fusion fix step
+
+Improvements:
+
+* use smaller test data
+
 ## 1.1.9 (2016-6-7)
 
 Improvements:
 
 * offer more deployment methods (PyPI, bioconda, Docker and Galaxy Tool). Thanks
 @bgruening and @anatskiy for their helps!
-
 
 ## 1.1.8 (2016-4-21)
 

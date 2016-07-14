@@ -7,9 +7,9 @@
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
-Version: 1.1.9
+Version: 1.1.10
 
-Last Modified: 2016-6-7
+Last Modified: 2016-7-14
 
 Authors: Xiao-Ou Zhang (zhangxiaoou@picb.ac.cn), Li Yang (liyang@picb.ac.cn)
 
@@ -133,7 +133,7 @@ python setup.py install
 ##Usage
 
 ```bash
-CIRCexplorer.py 1.1.9 -- circular RNA analysis toolkits.
+CIRCexplorer.py 1.1.10 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 

@@ -16,7 +16,7 @@ class TestFix(object):
         '''
         print('#%s: Start testing fix_fusion' % __name__)
         ref = 'data/ref.txt'
-        genome = pysam.FastaFile('data/hg19.fa')
+        genome = pysam.FastaFile('data/chr21.fa')
         input = 'data/annotated_junction.txt'
         output = 'data/test_circular_RNA.txt'
         fix_fusion(ref, genome, input, output, False)

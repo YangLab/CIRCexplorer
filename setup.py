@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 setup(name='CIRCexplorer',
-      version='1.1.9',
+      version='1.1.10',
       description='A combined strategy to identify circular RNAs (circRNAs and ciRNAs)',
       author='Xiao-Ou Zhang',
       author_email='zhangxiaoou@picb.ac.cn',
