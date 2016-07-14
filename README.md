@@ -4,6 +4,10 @@
 [![Coverage Status](https://coveralls.io/repos/github/YangLab/CIRCexplorer/badge.svg?branch=master)](https://coveralls.io/github/YangLab/CIRCexplorer?branch=master)
 [![PyPI version](https://badge.fury.io/py/CIRCexplorer.svg)](https://badge.fury.io/py/CIRCexplorer)
 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io/recipes/circexplorer/README.html)
+[![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg)](https://github.com/YangLab/CIRCexplorer2/blob/master/LICENSE.txt)
+
+[![PyPI Downloads](https://img.shields.io/pypi/dm/circexplorer.svg)](https://pypi.python.org/pypi/CIRCexplorer)
+[![Anaconda-Server Downloads](https://anaconda.org/bioconda/circexplorer/badges/downloads.svg)](https://anaconda.org/bioconda/circexplorer)
 
 CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.
 
