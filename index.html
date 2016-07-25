@@ -25,13 +25,17 @@
 <p><a href="https://travis-ci.org/YangLab/CIRCexplorer"><img src="https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master" alt="Build Status"></a>
 <a href="https://coveralls.io/github/YangLab/CIRCexplorer?branch=master"><img src="https://coveralls.io/repos/github/YangLab/CIRCexplorer/badge.svg?branch=master" alt="Coverage Status"></a>
 <a href="https://badge.fury.io/py/CIRCexplorer"><img src="https://badge.fury.io/py/CIRCexplorer.svg" alt="PyPI version"></a>
-<a href="http://bioconda.github.io/recipes/circexplorer/README.html"><img src="https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square" alt="install with bioconda"></a></p>
+<a href="http://bioconda.github.io/recipes/circexplorer/README.html"><img src="https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square" alt="install with bioconda"></a>
+<a href="https://github.com/YangLab/CIRCexplorer2/blob/master/LICENSE.txt"><img src="https://img.shields.io/badge/license-MIT-orange.svg" alt="The MIT License"></a></p>
+
+<p><a href="https://pypi.python.org/pypi/CIRCexplorer"><img src="https://img.shields.io/pypi/dm/circexplorer.svg" alt="PyPI Downloads"></a>
+<a href="https://anaconda.org/bioconda/circexplorer"><img src="https://anaconda.org/bioconda/circexplorer/badges/downloads.svg" alt="Anaconda-Server Downloads"></a></p>
 
 <p>CIRCexplorer is a combined strategy to identify junction reads from back spliced exons and intron lariats.</p>
 
-<p>Version: 1.1.9</p>
+<p>Version: 1.1.10</p>
 
-<p>Last Modified: 2016-6-7</p>
+<p>Last Modified: 2016-7-14</p>
 
 <p>Authors: Xiao-Ou Zhang (<a href="mailto:zhangxiaoou@picb.ac.cn">zhangxiaoou@picb.ac.cn</a>), Li Yang (<a href="mailto:liyang@picb.ac.cn">liyang@picb.ac.cn</a>)</p>
 
@@ -43,6 +47,8 @@
 see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.md">CHANGELOG</a>.</p>
 
 <p><a href="https://github.com/YangLab/CIRCexplorer/wiki/FAQ">FAQ</a></p>
+
+<p><em>After one year's tensive development, we have upgraded and extended CIRCexplorer to a new version -- <a href="https://github.com/YangLab/CIRCexplorer2">CIRCexplorer2</a>, with many improvements and lots of new features. Welcome to use and cite it!</em></p>
 
 <h2>
 <a id="a-schematic-flow-shows-the-pipeline" class="anchor" href="#a-schematic-flow-shows-the-pipeline" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A schematic flow shows the pipeline</h2>
@@ -90,6 +96,8 @@ see the <a href="https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELOG.m
 <li>
 <a href="https://github.com/pysam-developers/pysam">pysam</a> &gt;=0.8.2</li>
 <li><a href="https://github.com/docopt/docopt">docopt</a></li>
+<li>
+<a href="https://github.com/kepbod/interval">interval</a> (If you use the old version of CIRCexplorer, you require to install the interval package from <a href="https://github.com/kepbod/interval">https://github.com/kepbod/interval</a>. For the latest version of CIRCexplorer, you won't install it by yourself.)</li>
 </ul>
 
 <h3>
@@ -178,7 +186,7 @@ RNAs, <a href="http://www.sciencedirect.com/science/article/pii/S109727651300590
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
 
-<div class="highlight highlight-source-shell"><pre>CIRCexplorer.py 1.1.9 -- circular RNA analysis toolkits.
+<div class="highlight highlight-source-shell"><pre>CIRCexplorer.py 1.1.10 -- circular RNA analysis toolkits.
 
 Usage: CIRCexplorer.py [options]
 
