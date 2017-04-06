@@ -1,4 +1,4 @@
-#CIRCexplorer
+# CIRCexplorer
 
 [![Build Status](https://travis-ci.org/YangLab/CIRCexplorer.svg?branch=master)](https://travis-ci.org/YangLab/CIRCexplorer)
 [![Coverage Status](https://coveralls.io/repos/github/YangLab/CIRCexplorer/badge.svg?branch=master)](https://coveralls.io/github/YangLab/CIRCexplorer?branch=master)
@@ -30,7 +30,7 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 
 *NEWS: [CIRCpedia](http://www.picb.ac.cn/rnomics/circpedia) is an integrative database, aiming to annotating alternative back-splicing and alternative splicing in circRNAs across different cell lines. Welcome to use!*
 
-##A schematic flow shows the pipeline
+## A schematic flow shows the pipeline
 
 ![pipeline](https://raw.githubusercontent.com/YangLab/CIRCexplorer/master/flow.jpg)
 
@@ -38,11 +38,11 @@ see the [CHANGELOG](https://github.com/YangLab/CIRCexplorer/blob/master/CHANGELO
 
 CIRCexplorer is now only a circular RNA annotating tool, and it parses fusion junction information from mapping results of other aligners. The result of circular RNA annotating is directly dependent on the mapping strategy of aligners. Different aligners may have different circular RNA annotations. CIRCexplorer is now only in charge of giving fusion junctions a correct gene annotation. Other functions and supports for more aligners are under tensive developments. Thanks for your supports and understanding!
 
-##Prerequisites
+## Prerequisites
 
-###Software / Package
+### Software / Package
 
-####TopHat or STAR
+#### TopHat or STAR
 
 * TopHat & TopHat-Fusion
     + [TopHat](http://ccb.jhu.edu/software/tophat/index.shtml) 2.0.9
@@ -50,22 +50,22 @@ CIRCexplorer is now only a circular RNA annotating tool, and it parses fusion ju
 * STAR (optional)
     + [STAR](https://github.com/alexdobin/STAR) 2.4.0j
 
-####Others
+#### Others
 * [bedtools](https://github.com/arq5x/bedtools2)
 * [pysam](https://github.com/pysam-developers/pysam) >=0.8.2
 * [docopt](https://github.com/docopt/docopt)
 * [interval](https://github.com/kepbod/interval) (If you use the old version of CIRCexplorer, you require to install the interval package from https://github.com/kepbod/interval. For the latest version of CIRCexplorer, you won't install it by yourself.)
 
-###RNA-seq
+### RNA-seq
 
 The [poly(A)−/ribo− RNA-seq](http://genomebiology.com/2011/12/2/R16) is recommended. If you want to obtain more circular
 RNAs, [RNase R treatment](http://www.sciencedirect.com/science/article/pii/S109727651300590X) could be performed.
 
-###Aligner
+### Aligner
 
 CIRCexplorer was originally developed as a circular RNA analysis toolkit supporting TopHat & TopHat-Fusion. After version 1.1.0, it also supports STAR.
 
-####TopHat & TopHat-Fusion
+#### TopHat & TopHat-Fusion
 
 To obtain junction reads for circular RNAs, two-step mapping strategy was exploited:
 
@@ -87,19 +87,19 @@ bamToFastq -i tophat/unmapped.bam -fq tophat/unmapped.fastq
 tophat2 -o tophat_fusion -p 15 --fusion-search --keep-fasta-order --bowtie1 --no-coverage-search hg19_bowtie1_index tophat/unmapped.fastq
 ```
 
-####STAR
+#### STAR
 
 To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a positive value. For more details about STAR, please refer to [STAR manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf).
 
-##Installation
+## Installation
 
-####Option 1: using pip
+#### Option 1: using pip
 
 ```bash
 pip install CIRCexplorer
 ```
 
-####Option 2: via conda
+#### Option 2: via conda
 
 CIRCexplorer is available as conda package with:
 
@@ -107,7 +107,7 @@ CIRCexplorer is available as conda package with:
 conda install circexplorer --channel bioconda
 ```
 
-####Option 3: from docker container
+#### Option 3: from docker container
 
 [Docker container](https://quay.io/repository/mulled/circexplorer):
 
@@ -115,11 +115,11 @@ conda install circexplorer --channel bioconda
 docker run -it --rm quay.io/mulled/circexplorer:1.1.9--py35_0
 ```
 
-####Option 4: in galaxy
+#### Option 4: in galaxy
 
 If you have access to a [Galaxy](https://usegalaxy.org/) instance, CIRCexplorer is also available from the [Galaxy Tool Shed](https://toolshed.g2.bx.psu.edu/view/bgruening/circexplorer).
 
-####Option 5: from source codes
+#### Option 5: from source codes
 
 1 Download CIRCexplorer
 ```bash
@@ -137,7 +137,7 @@ pip install -r requirements.txt
 python setup.py install
 ```
 
-##Usage
+## Usage
 
 ```bash
 CIRCexplorer.py 1.1.10 -- circular RNA analysis toolkits.
@@ -156,15 +156,15 @@ Options:
     --no-fix                       No-fix mode (useful for species with poor gene annotations)
 ```
 
-###Example
+### Example
 
-####TopHat & TopHat-Fusion
+#### TopHat & TopHat-Fusion
 
 ```bash
 CIRCexplorer.py -f tophat_fusion/accepted_hits.bam -g hg19.fa -r ref.txt
 ```
 
-####STAR
+#### STAR
 
 * convert `Chimeric.out.junction` to `fusion_junction.txt` (`star_parse.py` was modified from STAR [filterCirc.awk](https://github.com/alexdobin/STAR/blob/master/extras/scripts/filterCirc.awk))
 
@@ -178,7 +178,7 @@ star_parse.py Chimeric.out.junction fusion_junction.txt
 CIRCexplorer.py -j fusion_junction.txt -g hg19.fa -r ref.txt
 ```
 
-###Note
+### Note
 
 * ref.txt is in the format ([Gene Predictions and RefSeq Genes with Gene Names](https://genome.ucsc.edu/FAQ/FAQformat.html#format9)) below (see details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/master/example/ref_example.txt))
 
@@ -210,7 +210,7 @@ Example (download hg19 RefSeq gene annotation file):
 fetch_ucsc.py hg19 ref ref.txt
 ```
 
-##Output
+## Output
 
 See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/master/example/output_example.txt)
 
@@ -237,11 +237,11 @@ See details in [the example file](https://github.com/YangLab/CIRCexplorer/blob/m
 
 ***Note: The first 12 columns are in [BED12 format](http://genome.ucsc.edu/FAQ/FAQformat.html#format1).***
 
-##Citation
+## Citation
 
 **[Zhang XO, Wang HB, Zhang Y, Lu X, Chen LL and Yang L. Complementary sequence-mediated exon circularization. Cell, 2014, 159: 134-147](http://www.sciencedirect.com/science/article/pii/S0092867414011118)**
 
-##License
+## License
 
-Copyright (C) 2014-2016 YangLab.  See the [LICENSE](https://github.com/YangLab/CIRCexplorer/blob/master/LICENSE.txt)
+Copyright (C) 2014-2017 YangLab.  See the [LICENSE](https://github.com/YangLab/CIRCexplorer/blob/master/LICENSE.txt)
 file for license rights and limitations (MIT).
