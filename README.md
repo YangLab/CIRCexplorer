@@ -107,14 +107,6 @@ CIRCexplorer is available as conda package with:
 conda install circexplorer --channel bioconda
 ```
 
-#### Option 3: from docker container
-
-[Docker container](https://quay.io/repository/mulled/circexplorer):
-
-```bash
-docker run -it --rm quay.io/mulled/circexplorer:1.1.9--py35_0
-```
-
 #### Option 4: in galaxy
 
 If you have access to a [Galaxy](https://usegalaxy.org/) instance, CIRCexplorer is also available from the [Galaxy Tool Shed](https://toolshed.g2.bx.psu.edu/view/bgruening/circexplorer).
