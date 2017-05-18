@@ -4,7 +4,7 @@ test_annotate.py: Test convert_fusion
 
 import os
 import pysam
-from utils import check_file
+from .utils import check_file
 from circ.CIRCexplorer import convert_fusion
 
 
@@ -14,7 +14,7 @@ class TestConvert(object):
         '''
         Run convert_fusion
         '''
-        print('#%s: Start testing convert_fusion' % __name__)
+        print(('#%s: Start testing convert_fusion' % __name__))
         fusion_bam = pysam.AlignmentFile('data/tophat_fusion.bam', 'rb')
         output = 'data/test_fusion_junction.txt'
         convert_fusion(fusion_bam, output)
@@ -23,7 +23,7 @@ class TestConvert(object):
         '''
         Check file
         '''
-        print('#%s: Test convert_fusion' % __name__)
+        print(('#%s: Test convert_fusion' % __name__))
         test_file = 'data/test_fusion_junction.txt'
         result_file = 'data/fusion_junction.txt'
         check_file(test_file, result_file)
@@ -32,5 +32,5 @@ class TestConvert(object):
         '''
         Delete convert file
         '''
-        print('#%s: End testing convert_fusion' % __name__)
+        print(('#%s: End testing convert_fusion' % __name__))
         os.remove('data/test_fusion_junction.txt')

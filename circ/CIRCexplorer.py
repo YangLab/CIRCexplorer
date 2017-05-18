@@ -28,7 +28,7 @@ from docopt import docopt
 import sys
 import pysam
 from collections import defaultdict
-from genomic_interval import Interval
+from .genomic_interval import Interval
 import tempfile
 import os
 from pkg_resources import parse_version as norm_vr
@@ -57,7 +57,7 @@ def convert_fusion(fusion_bam, output_f):
         for i, pos in enumerate(fusions):
             outf.write('%s\tFUSIONJUNC_%d/%d\t0\t+\n' % (pos, i, fusions[pos]))
             total += fusions[pos]
-    print('Converted %d fusion reads!' % total)
+    print(('Converted %d fusion reads!' % total))
 
 
 def annotate_fusion(ref_f, input_f, output_f):
@@ -75,7 +75,7 @@ def annotate_fusion(ref_f, input_f, output_f):
                                           fusions[chrom])
             for itl in result:
                 # extract gene annotations
-                iso = list(filter(lambda x: x.startswith('iso'), itl[2:]))
+                iso = list([x for x in itl[2:] if x.startswith('iso')])
                 # for each overlapped fusion junction
                 for fus in itl[(2 + len(iso)):]:
                     reads = fus.split()[1]
@@ -113,7 +113,7 @@ def annotate_fusion(ref_f, input_f, output_f):
                         for bed in edge_annotations:
                             outf.write(bed + '\n')
                         total.add(fus)
-    print('Annotated %d fusion junctions!' % len(total))
+    print(('Annotated %d fusion junctions!' % len(total)))
 
 
 def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
@@ -141,10 +141,10 @@ def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
                 s, e = [int(x) for x in index.split(',')]
                 if strand == '+':
                     index_info = ','.join(str(x + 1)
-                                          for x in xrange(s, e + 1))
+                                          for x in range(s, e + 1))
                 else:
                     index_info = ','.join(str(exon_num - x)
-                                          for x in xrange(s, e + 1))
+                                          for x in range(s, e + 1))
                 start = str(starts[s])
                 end = str(ends[e])
                 length = str(e - s + 1)
@@ -177,7 +177,7 @@ def fix_fusion(ref_f, genome_fa, input_f, output_f, no_fix):
                                  reads, 'ciRNA', gene, iso, index_info,
                                  intron])
             outf.write(bed + '\n')
-    print('Fixed %d fusion junctions!' % total)
+    print(('Fixed %d fusion junctions!' % total))
 
 
 def parse_bam(bam):
@@ -498,7 +498,7 @@ def main():
     ref_f = options['--ref']
     output_prefix = options['--output']
     output = output_prefix + '_circ.txt'
-    print('Start CIRCexplorer %s' % __version__)
+    print(('Start CIRCexplorer %s' % __version__))
     if options['--junc']:
         temp1 = options['--junc']
         temp_dir, temp2 = create_temp(options['--tmp'], output_prefix, 0)

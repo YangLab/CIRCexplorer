@@ -15,6 +15,6 @@ def check_file(test_f, result_f):
     '''
     Check if files are existed and same
     '''
-    print('Check %s file...' % test_f)
+    print(('Check %s file...' % test_f))
     assert os.path.isfile(test_f), 'No %s file' % test_f
     assert compare_file(test_f, result_f), 'Difference in %s' % test_f

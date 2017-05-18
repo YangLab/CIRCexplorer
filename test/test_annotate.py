@@ -3,7 +3,7 @@ test_annotate.py: Test annotate_fusion
 '''
 
 import os
-from utils import check_file
+from .utils import check_file
 from circ.CIRCexplorer import annotate_fusion
 
 
@@ -13,7 +13,7 @@ class TestAnnotate(object):
         '''
         Run annotate_fusion
         '''
-        print('#%s: Start testing annotate_fusion' % __name__)
+        print(('#%s: Start testing annotate_fusion' % __name__))
         ref = 'data/ref.txt'
         input = 'data/fusion_junction.txt'
         output = 'data/test_annotated_junction.txt'
@@ -23,7 +23,7 @@ class TestAnnotate(object):
         '''
         Check file
         '''
-        print('#%s: Test annotate_fusion' % __name__)
+        print(('#%s: Test annotate_fusion' % __name__))
         test_file = 'data/test_annotated_junction.txt'
         result_file = 'data/annotated_junction.txt'
         check_file(test_file, result_file)
@@ -32,5 +32,5 @@ class TestAnnotate(object):
         '''
         Delete annotate file
         '''
-        print('#%s: End testing annotate_fusion' % __name__)
+        print(('#%s: End testing annotate_fusion' % __name__))
         os.remove('data/test_annotated_junction.txt')
