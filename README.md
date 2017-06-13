@@ -87,7 +87,14 @@ tophat2 -o tophat_fusion -p 15 --fusion-search --keep-fasta-order --bowtie1 --no
 
 #### STAR
 
-To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a positive value. For more details about STAR, please refer to [STAR manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf).
+To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a positive value.
+
+For example:
+```bash
+STAR --chimSegmentMin 10 --runThreadN 10 --genomeDir hg19_STAR_index --readFilesIn RNA_seq.fastq
+```
+
+For more details about STAR, please refer to [STAR manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf).
 
 ## Installation
 
@@ -105,11 +112,11 @@ CIRCexplorer is available as conda package with:
 conda install circexplorer --channel bioconda
 ```
 
-#### Option 4: in galaxy
+#### Option 3: in galaxy
 
 If you have access to a [Galaxy](https://usegalaxy.org/) instance, CIRCexplorer is also available from the [Galaxy Tool Shed](https://toolshed.g2.bx.psu.edu/view/bgruening/circexplorer).
 
-#### Option 5: from source codes
+#### Option 4: from source codes
 
 1 Download CIRCexplorer
 ```bash
