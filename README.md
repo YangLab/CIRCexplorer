@@ -89,9 +89,14 @@ tophat2 -o tophat_fusion -p 15 --fusion-search --keep-fasta-order --bowtie1 --no
 
 To detect fusion junctions with STAR, `--chimSegmentMin` should be set to a positive value.
 
-For example:
+Example 1 (single reads):
 ```bash
 STAR --chimSegmentMin 10 --runThreadN 10 --genomeDir hg19_STAR_index --readFilesIn RNA_seq.fastq
+```
+
+Example 2 (paired-end reads):
+```bash
+STAR --chimSegmentMin 10 --runThreadN 10 --genomeDir hg19_STAR_index --readFilesIn read_1.fastq read_2.fastq
 ```
 
 For more details about STAR, please refer to [STAR manual](https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf).
